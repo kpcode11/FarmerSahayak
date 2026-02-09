@@ -1,6 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { apiRequest } from "../../config/api.js";
-import { Link } from "react-router-dom";
+
+// Simple markdown parser for bold text (**text**)
+function formatMessage(text) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
 
 function Chatbot() {
   const [messages, setMessages] = useState([
@@ -155,25 +165,7 @@ function Chatbot() {
                       : "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                  
-                  {/* Related Schemes Links */}
-                  {message.schemes && message.schemes.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-300">
-                      <p className="text-xs font-semibold mb-2">📋 Related Schemes:</p>
-                      <div className="space-y-1">
-                        {message.schemes.map((scheme, idx) => (
-                          <Link
-                            key={idx}
-                            to={`/schemes/${scheme.slug}`}
-                            className="block text-xs text-blue-600 hover:text-blue-800 underline"
-                          >
-                            View Scheme {idx + 1} →
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <p className="text-sm whitespace-pre-wrap">{formatMessage(message.text)}</p>
                   
                   <p className="text-xs mt-2 opacity-70">{formatTime(message.timestamp)}</p>
                 </div>

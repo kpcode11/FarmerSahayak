@@ -10,13 +10,15 @@ import {
 } from "flowbite-react";
 import { useAuth } from "../../hooks/useAuth.jsx";
 import { Link as RouterLink } from "react-router-dom";
-import { UserButton, SignInButton, useClerk } from "@clerk/clerk-react";
+import { useClerk } from "@clerk/clerk-react";
 
 function Navvbar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { signOut } = useClerk();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   // Close dropdown when clicking outside
@@ -87,10 +89,10 @@ function Navvbar() {
     </svg>
   );
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
     setProfileDropdownOpen(false);
+    await signOut();
+    navigate("/");
   };
 
   return (
@@ -201,18 +203,76 @@ function Navvbar() {
                   <span>Saved</span>
                 </button>
 
-                {/* Clerk User Button - replaces custom profile dropdown */}
-                <div className="flex items-center">
-                  <UserButton 
-                    afterSignOutUrl="/"
-                    appearance={{
-                      elements: {
-                        avatarBox: "w-10 h-10",
-                        userButtonPopoverCard: "bg-gray-800 border-gray-700",
-                        userButtonPopoverActions: "text-gray-200",
-                      }
-                    }}
-                  />
+                {/* Profile Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                    className="flex items-center gap-1 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-all"
+                    title="Profile"
+                  >
+                    {user?.imageUrl ? (
+                      <img
+                        src={user.imageUrl}
+                        alt={user.name || "Profile"}
+                        className="w-8 h-8 rounded-full object-cover border-2 border-emerald-500"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <ProfileIcon />
+                    )}
+                    <MenuIcon />
+                  </button>
+
+                  {profileDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-xl shadow-xl animate-fade-in z-50">
+                      {/* User info header */}
+                      <div className="px-4 py-3 border-b border-gray-700">
+                        <div className="flex items-center gap-3">
+                          {user?.imageUrl ? (
+                            <img
+                              src={user.imageUrl}
+                              alt={user.name || "Profile"}
+                              className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
+                              {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                            </div>
+                          )}
+                          <div className="overflow-hidden">
+                            <p className="text-sm font-semibold text-white truncate">{user?.name || "User"}</p>
+                            <p className="text-xs text-gray-400 truncate">{user?.email || ""}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <Link
+                        to="/profile"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2 px-4 py-3 text-gray-200 hover:bg-gray-700 transition-colors"
+                      >
+                        <ProfileIcon />
+                        <span>My Profile</span>
+                      </Link>
+                      <Link
+                        to="/saved-schemes"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2 px-4 py-3 text-gray-200 hover:bg-gray-700 transition-colors sm:hidden"
+                      >
+                        <SavedIcon />
+                        <span>Saved Schemes</span>
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 w-full px-4 py-3 text-red-400 hover:bg-gray-700 rounded-b-xl transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
@@ -226,7 +286,7 @@ function Navvbar() {
 
             {/* Mobile Menu Toggle */}
             <button
-              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-all"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,12 +297,12 @@ function Navvbar() {
         </div>
 
         {/* Mobile Navigation */}
-        {profileDropdownOpen && (
+        {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-700">
             <div className="space-y-1">
               <Link
                 to="/"
-                onClick={() => setProfileDropdownOpen(false)}
+                onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/"
                     ? "bg-emerald-600 text-white"
@@ -253,7 +313,7 @@ function Navvbar() {
               </Link>
               <Link
                 to="/schemes"
-                onClick={() => setProfileDropdownOpen(false)}
+                onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/schemes"
                     ? "bg-emerald-600 text-white"
@@ -264,7 +324,7 @@ function Navvbar() {
               </Link>
               <Link
                 to="/maps"
-                onClick={() => setProfileDropdownOpen(false)}
+                onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/maps"
                     ? "bg-emerald-600 text-white"
@@ -275,7 +335,7 @@ function Navvbar() {
               </Link>
               <Link
                 to="/chatbot"
-                onClick={() => setProfileDropdownOpen(false)}
+                onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/chatbot"
                     ? "bg-emerald-600 text-white"

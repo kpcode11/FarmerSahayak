@@ -124,11 +124,11 @@ def suggestions():
     })
 
 if __name__ == '__main__':
-    print("🤖 Chatbot Service Starting...")
-    print("📊 Loading vector store...")
-    print("🚀 Server ready on http://localhost:5001")
+    print("Chatbot Service Starting...")
+    print("Loading vector store...")
+    print("Server ready on http://localhost:5001")
     print("\nMake sure:")
-    print("  ✓ Ollama is running (ollama serve)")
-    print("  ✓ Model llama3.2 is available")
-    print("  ✓ Vector database is initialized")
+    print("  - Ollama is running (ollama serve)")
+    print("  - Model llama3.2 is available")
+    print("  - Vector database is initialized")
     app.run(host='0.0.0.0', port=5001, debug=True)
