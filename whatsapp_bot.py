@@ -45,9 +45,9 @@ def whatsapp_webhook():
     
     try:
         if incoming_msg.lower() in ['hi', 'hello', 'start']:
-            msg.body("👋 Hello! I'm your Indian Farmer Schemes Assistant. Ask me anything about farmer schemes in India!")
+            msg.body("Hello! I'm your Indian Farmer Schemes Assistant. Ask me anything about farmer schemes in India!")
         elif incoming_msg.lower() in ['help']:
-            msg.body("I can help you with:\n\n✅ Information about farmer schemes\n✅ Eligibility criteria\n✅ Benefits and application process\n✅ Required documents\n\nJust ask your question!")
+            msg.body("I can help you with:\n\n Information about farmer schemes\n Eligibility criteria\n Benefits and application process\n Required documents\n\nJust ask your question!")
         else:
             # Retrieve relevant documents
             retrieved_docs = retriever.invoke(incoming_msg)
@@ -71,6 +71,6 @@ def health_check():
     return {"status": "healthy", "service": "WhatsApp Farmer Schemes Bot"}
 
 if __name__ == '__main__':
-    print("🚀 WhatsApp Bot Server Starting...")
+    print(" WhatsApp Bot Server Starting...")
     print("Make sure Ollama is running and the model is available!")
     app.run(host='0.0.0.0', port=5000, debug=True)
