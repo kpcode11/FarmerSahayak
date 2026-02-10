@@ -1,11 +1,11 @@
-# 🌾 Farmers Support Platform
+# Farmers Support Platform
 
 
 
 
 A comprehensive MERN stack application designed to help farmers access government schemes, get instant support through an AI-powered chatbot, and manage their profiles efficiently.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -19,19 +19,19 @@ A comprehensive MERN stack application designed to help farmers access governmen
 - [Contributing](#contributing)
 - [License](#license)
 
-## ✨ Features
+## Features
 
-- 🤖 **AI-Powered Chatbot** - Get instant answers to farming-related queries
-- 📱 **WhatsApp Bot Integration** - Support via WhatsApp messaging
-- 🏛️ **Government Schemes** - Browse and search government schemes for farmers
-- 🗺️ **Interactive Maps** - Location-based services using Google Maps
-- 🔐 **User Authentication** - Secure JWT-based authentication with email verification
-- 👤 **User Profiles** - Manage personal information and preferences
-- 🌐 **Multilingual Support** - Available in English and Hindi
-- 🔊 **Text-to-Speech** - Audio support for accessibility
-- ☁️ **File Upload** - Cloudinary integration for image uploads
+- **AI-Powered Chatbot** - Get instant answers to farming-related queries
+- **WhatsApp Bot Integration** - Support via WhatsApp messaging
+- **Government Schemes** - Browse and search government schemes for farmers
+- **Interactive Maps** - Location-based services using Google Maps
+- **User Authentication** - Secure JWT-based authentication with email verification
+- **User Profiles** - Manage personal information and preferences
+- **Multilingual Support** - Available in English and Hindi
+- **Text-to-Speech** - Audio support for accessibility
+- **File Upload** - Cloudinary integration for image uploads
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React 19** - UI library
@@ -55,7 +55,7 @@ A comprehensive MERN stack application designed to help farmers access governmen
 - **LangChain** - AI chatbot framework
 - **ChromaDB** - Vector database for chatbot
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 - **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
@@ -63,7 +63,7 @@ Before you begin, ensure you have the following installed:
 - **MongoDB Atlas Account** - [Sign up](https://www.mongodb.com/cloud/atlas)
 - **Git** - [Download](https://git-scm.com/)
 
-## 🚀 Installation
+## Installation
 
 ### 1. Clone the Repository
 
@@ -176,7 +176,7 @@ VITE_API_BASE_URL=http://localhost:3000/api/v1
 3. Create credentials (API Key)
 4. Copy the API key
 
-## 🏃 Running the Application
+## Running the Application
 
 ### Option 1: Run All Services Separately
 
@@ -229,7 +229,7 @@ npm install -g concurrently
 npm run dev
 ```
 
-## � Deployment
+## Deployment
 
 Ready to deploy your application to production? We've prepared a comprehensive deployment guide.
 
@@ -259,7 +259,7 @@ Ready to deploy your application to production? We've prepared a comprehensive d
 3. **Update CORS Settings**
    - Update backend `CORS_ORIGIN` with your Vercel URL
 
-📖 **[Complete Deployment Guide →](DEPLOYMENT.md)**
+**[Complete Deployment Guide →](DEPLOYMENT.md)**
 
 The detailed guide includes:
 - Step-by-step instructions with screenshots
@@ -268,7 +268,7 @@ The detailed guide includes:
 - Alternative deployment options
 - Free tier optimization
 
-## �📁 Project Structure
+## Project Structure
 
 ```
 farmers-support-platform/
@@ -308,7 +308,7 @@ farmers-support-platform/
 └── README.md                    # This file
 ```
 
-## 🔌 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 
@@ -403,7 +403,7 @@ Content-Type: application/json
 }
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please follow these steps:
 
@@ -413,15 +413,15 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the ISC License.
 
-## 👥 Authors
+## Authors
 
 - **Keshav** - Initial work
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Government of India for scheme data
 - MongoDB for database services
@@ -429,7 +429,7 @@ This project is licensed under the ISC License.
 - Google Cloud for Maps and TTS services
 - All contributors who help improve this project
 
-## 📧 Contact
+## Contact
 
 For questions or support, please open an issue on GitHub.
 
