@@ -73,6 +73,7 @@ const SchemesList = () => {
   const [uiTags, setUiTags] = useState(searchParams.get("tags") || "");
   const [uiQ, setUiQ] = useState(searchParams.get("q") || "");
   const [uiSort, setUiSort] = useState(searchParams.get("sort") || "createdAt:desc");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Initialize page/limit from URL once on mount
   useEffect(() => {
@@ -320,7 +321,23 @@ const SchemesList = () => {
 
           {/* ===== LEFT SIDEBAR ===== */}
           <aside className="w-full lg:w-56 flex-shrink-0">
-            <form onSubmit={handleSearchSubmit} className="space-y-7">
+            {/* Mobile filter toggle */}
+            <button
+              onClick={() => setFiltersOpen(!filtersOpen)}
+              className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-lg mb-4 text-sm font-medium text-gray-700"
+            >
+              <span className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filters
+              </span>
+              <svg className={`w-4 h-4 transition-transform ${filtersOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <form onSubmit={handleSearchSubmit} className={`space-y-7 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
 
               {/* Level / Location Filter */}
               <div>
@@ -430,18 +447,18 @@ const SchemesList = () => {
           {/* ===== MAIN CONTENT ===== */}
           <main className="flex-1 min-w-0">
 
-            {/* Header Row */}
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Active Schemes</h1>
-                <p className="text-base text-gray-500 mt-1">
+            <div className="flex flex-col gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Active Schemes</h1>
+                  <p className="text-sm sm:text-base text-gray-500 mt-1">
                   {totalSchemes > 0
                     ? `Showing ${totalSchemes} schemes based on your preferences`
                     : 'No schemes found'}
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 {/* Search */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -454,7 +471,7 @@ const SchemesList = () => {
                     value={uiQ}
                     onChange={(e) => { setUiQ(e.target.value); setQ(e.target.value); setCurrentPage(1); }}
                     placeholder="Search schemes..."
-                    className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none w-52 sm:w-64 transition-colors"
+                    className="w-full sm:w-52 md:w-64 pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -481,8 +498,8 @@ const SchemesList = () => {
                 </div>
               </div>
             </div>
+            </div>
 
-            {/* No Results */}
             {schemes.length === 0 && !loading ? (
               <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
                 <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -504,13 +521,13 @@ const SchemesList = () => {
               </div>
             ) : (
               /* ===== SCHEME CARDS GRID ===== */
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
                 {schemes.map((scheme) => (
                   <div
                     key={scheme._id}
                     className="bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all duration-200 flex flex-col"
                   >
-                    <div className="p-6 flex flex-col flex-1">
+                    <div className="p-4 sm:p-6 flex flex-col flex-1">
                       {/* Top: Badge + Level + Save */}
                       <div className="flex items-start justify-between gap-2 mb-4">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -652,12 +669,12 @@ const SchemesList = () => {
 
             {/* ===== PAGINATION ===== */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 pb-8">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 pb-8 flex-wrap">
                 {/* Prev */}
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
                     currentPage === 1
                       ? 'text-gray-300 border-gray-200 cursor-not-allowed'
                       : 'text-gray-600 border-gray-300 hover:bg-gray-50'
@@ -673,7 +690,7 @@ const SchemesList = () => {
                   <button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm font-medium transition-colors ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm font-medium transition-colors ${
                       currentPage === pageNum
                         ? 'bg-emerald-600 text-white border-emerald-600'
                         : 'text-gray-600 border-gray-300 hover:bg-gray-50'
@@ -685,14 +702,14 @@ const SchemesList = () => {
 
                 {/* Ellipsis */}
                 {totalPages > 5 && currentPage < totalPages - 2 && (
-                  <span className="w-10 h-10 flex items-center justify-center text-gray-400 text-sm">...</span>
+                  <span className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 text-sm">...</span>
                 )}
 
                 {/* Next */}
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
                     currentPage === totalPages
                       ? 'text-gray-300 border-gray-200 cursor-not-allowed'
                       : 'text-gray-600 border-gray-300 hover:bg-gray-50'

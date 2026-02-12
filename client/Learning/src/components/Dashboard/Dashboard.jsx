@@ -108,7 +108,7 @@ const Dashboard = () => {
               </div>
 
               {/* Heading */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
                 Empowering Indian{" "}
                 <span className="text-emerald-600">Agriculture</span>{" "}
                 Together
@@ -165,7 +165,7 @@ const Dashboard = () => {
                 />
                 
                 {/* Overlay Card */}
-                <div className="absolute bottom-6 right-6 bg-white rounded-xl shadow-lg p-4 max-w-xs">
+                <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-white rounded-xl shadow-lg p-3 sm:p-4 max-w-[200px] sm:max-w-xs hidden sm:block">
                   <div className="flex items-start justify-between mb-2">
                     <span className="text-sm font-medium text-gray-600">Latest Disbursement</span>
                     <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">
@@ -217,7 +217,7 @@ const Dashboard = () => {
           </div>
 
           {/* Action Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {quickActions.map((action, index) => (
               <div
                 key={index}
@@ -275,7 +275,7 @@ const Dashboard = () => {
           </div>
 
           {/* Category Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {categories.map((category, index) => (
               <Link
                 key={index}

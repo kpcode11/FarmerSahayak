@@ -149,7 +149,7 @@ function Navvbar() {
           {/* Right Section */}
           <div className="flex items-center gap-3">
             {/* Language Selector */}
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <select
                 className="pl-3 pr-8 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:border-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none appearance-none cursor-pointer"
                 onChange={(e) => {
@@ -326,6 +326,27 @@ function Navvbar() {
               >
                 AI Assistant
               </Link>
+
+              {/* Language selector for mobile */}
+              <div className="px-4 pt-3 border-t border-gray-100 mt-2">
+                <label className="text-xs text-gray-500 mb-1 block">Language</label>
+                <select
+                  className="w-full px-3 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                  onChange={(e) => {
+                    const lang = e.target.value;
+                    if (window.setLanguage) window.setLanguage(lang);
+                    if (window.setAppLanguage) window.setAppLanguage(lang);
+                  }}
+                  defaultValue="en"
+                >
+                  <option value="en">English</option>
+                  <option value="hi">हिन्दी</option>
+                  <option value="bn">বাংলা</option>
+                  <option value="te">తెలుగు</option>
+                  <option value="mr">मराठी</option>
+                  <option value="ta">தமிழ்</option>
+                </select>
+              </div>
             </div>
           </div>
         )}
