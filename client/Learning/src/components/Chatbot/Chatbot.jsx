@@ -128,13 +128,13 @@ function Chatbot() {
     <div className="bg-gray-100">
       <div className="max-w-4xl mx-auto h-[calc(100vh-64px)] flex flex-col">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🤖</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-full flex items-center justify-center">
+              <span className="text-xl sm:text-2xl">🤖</span>
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900">Farmer Sahayak AI</h1>
+              <h1 className="text-base sm:text-lg font-semibold text-gray-900">Farmer Sahayak AI</h1>
               <div className="flex items-center gap-1">
                 <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -148,7 +148,7 @@ function Chatbot() {
         {/* Chat Messages */}
         <div
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto px-6 py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+          className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
           style={{
             backgroundColor: '#f0fdf4',
             backgroundImage: 'radial-gradient(circle, rgba(16,185,129,0.04) 1px, transparent 1px)',
@@ -218,13 +218,13 @@ function Chatbot() {
 
         {/* Suggestions */}
         {messages.length <= 1 && suggestions.length > 0 && (
-          <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
-            <div className="flex flex-wrap gap-2 justify-start">
+          <div className="bg-gray-50 px-3 sm:px-6 py-3 border-t border-gray-200">
+            <div className="flex flex-nowrap sm:flex-wrap gap-2 justify-start overflow-x-auto pb-1 scrollbar-thin">
               {suggestions.map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="text-sm px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-gray-700 transition-all hover:border-gray-400"
+                  className="text-xs sm:text-sm px-3 sm:px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-gray-700 transition-all hover:border-gray-400 whitespace-nowrap flex-shrink-0"
                 >
                   {suggestion}
                 </button>
@@ -233,9 +233,9 @@ function Chatbot() {
           </div>
         )}
         {/* Input Area */}
-        <div className={`bg-white border-t border-gray-200 px-6 py-3 transition-opacity flex-shrink-0 ${loading ? 'opacity-75' : 'opacity-100'}`}>
-          <div className="flex items-center gap-3">
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0 cursor-not-allowed opacity-40" disabled title="Voice input coming soon">
+        <div className={`bg-white border-t border-gray-200 px-3 sm:px-6 py-3 transition-opacity flex-shrink-0 ${loading ? 'opacity-75' : 'opacity-100'}`}>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0 cursor-not-allowed opacity-40 hidden sm:flex" disabled title="Voice input coming soon">
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
@@ -247,7 +247,7 @@ function Chatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask about schemes, eligibility, or farming help..."
+              placeholder="Ask about schemes or farming help..."
               className={`flex-1 px-4 py-2.5 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all text-gray-900 ${
                 loading ? 'border-gray-200 opacity-60 cursor-not-allowed' : 'border-gray-300 hover:border-gray-400'
               }`}

@@ -59,6 +59,7 @@ const Maps = () => {
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [manualLat, setManualLat] = useState('');
   const [manualLng, setManualLng] = useState('');
+  const [mobileView, setMobileView] = useState('map'); // 'map' or 'list'
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -183,9 +184,25 @@ const Maps = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-full h-screen flex flex-col lg:flex-row lg:gap-0">
+      {/* Mobile Tab Toggle */}
+      <div className="lg:hidden sticky top-16 z-20 bg-white border-b border-gray-200 flex">
+        <button
+          onClick={() => setMobileView('map')}
+          className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${mobileView === 'map' ? 'text-emerald-700 border-b-2 border-emerald-600 bg-emerald-50' : 'text-gray-600'}`}
+        >
+          Map View
+        </button>
+        <button
+          onClick={() => setMobileView('list')}
+          className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${mobileView === 'list' ? 'text-emerald-700 border-b-2 border-emerald-600 bg-emerald-50' : 'text-gray-600'}`}
+        >
+          List ({places.length})
+        </button>
+      </div>
+
+      <div className="max-w-full h-[calc(100vh-64px)] lg:h-screen flex flex-col lg:flex-row lg:gap-0">
         {/* LEFT SIDEBAR */}
-        <aside className="w-full lg:w-[380px] bg-white border-r border-gray-200 flex flex-col max-h-screen">
+        <aside className={`w-full lg:w-[380px] bg-white border-r border-gray-200 flex flex-col lg:max-h-screen ${mobileView === 'list' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Sticky Header */}
           <div className="sticky top-0 bg-white border-b border-gray-200 p-5 z-10">
             <h2 className="text-lg font-semibold text-gray-900 mb-1">Help Centers</h2>
@@ -329,7 +346,7 @@ const Maps = () => {
         </aside>
 
         {/* RIGHT: MAP */}
-        <main className="flex-1 relative bg-white rounded-lg m-4 lg:m-0 lg:rounded-none overflow-hidden min-h-[50vh] lg:min-h-screen">
+        <main className={`flex-1 relative bg-white overflow-hidden min-h-[50vh] lg:min-h-screen ${mobileView === 'map' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col'}`}>
           <div className="absolute top-4 right-4 z-30 flex items-center gap-1 bg-white rounded-lg shadow-md border border-gray-200">
             <button onClick={() => setMapType('roadmap')} className="px-4 py-2 text-xs font-medium text-gray-700 border-r border-gray-200 hover:bg-gray-50">Map</button>
             <button onClick={() => setMapType('satellite')} className="px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50">Satellite</button>
