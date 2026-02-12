@@ -42,33 +42,32 @@ const Documents = ({ scheme }) => {
 
   return (
     <div className="space-y-6">
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h3 className="card-title">Required Documents</h3>
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Required Documents</h3>
           
           <div className="space-y-4">
-            <div className="alert alert-warning">
-              <span>Please ensure all documents are valid and clearly readable</span>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <span className="text-gray-700 text-sm">Please ensure all documents are valid and clearly readable</span>
             </div>
             
             <div className="overflow-x-auto">
-              <table className="table">
+              <table className="w-full text-left">
                 <thead>
-                  <tr>
-                    <th>Document</th>
-                    <th>Required</th>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-gray-600 text-sm font-semibold py-3 pr-4">Document</th>
+                    <th className="text-gray-600 text-sm font-semibold py-3">Required</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(parsed.length > 0 ? parsed : [
                     { name: 'No documents information available for this scheme.', required: false }
                   ]).map((doc, index) => (
-                    <tr key={index}>
-                      <td className="font-medium">{doc.name}</td>
-                      <td>
-                        <div className={`badge ${doc.required ? 'badge-error' : 'badge-warning'}`}>
+                    <tr key={index} className="border-b border-gray-100">
+                      <td className="font-medium text-gray-800 py-3 pr-4">{doc.name}</td>
+                      <td className="py-3">
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-medium border ${doc.required ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
                           {doc.required ? 'Required' : 'Optional'}
-                        </div>
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -76,7 +75,6 @@ const Documents = ({ scheme }) => {
               </table>
             </div>
           </div>
-        </div>
       </div>
     </div>
   );
