@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from vector import retriever
 import os
@@ -8,8 +7,15 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS for Express backend to communicate
 
-# Initialize the model
-model = OllamaLLM(model="llama3.2")
+# Initialize the model - uses Groq (free cloud LLM) in production, Ollama locally
+if os.environ.get("GROQ_API_KEY"):
+    from langchain_groq import ChatGroq
+    model = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
+    print("Using Groq cloud LLM")
+else:
+    from langchain_ollama.llms import OllamaLLM
+    model = OllamaLLM(model="llama3.2")
+    print("Using local Ollama LLM")
 
 template = """
 You are an expert assistant for the Farmer Sahayak platform, helping Indian farmers find and understand government schemes.
@@ -87,12 +93,11 @@ def chat():
 def health():
     """Health check endpoint"""
     try:
-        # Test if Ollama is responding
         test_response = model.invoke("test")
         return jsonify({
             'success': True,
             'status': 'healthy',
-            'ollama': 'connected',
+            'llm': 'connected',
             'vector_store': 'active'
         })
     except Exception as e:
@@ -124,11 +129,12 @@ def suggestions():
     })
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5001))
     print("Chatbot Service Starting...")
     print("Loading vector store...")
-    print("Server ready on http://localhost:5001")
-    print("\nMake sure:")
-    print("  - Ollama is running (ollama serve)")
-    print("  - Model llama3.2 is available")
-    print("  - Vector database is initialized")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    print(f"Server ready on http://localhost:{port}")
+    if os.environ.get('GROQ_API_KEY'):
+        print("Using Groq cloud LLM")
+    else:
+        print("Using local Ollama - make sure 'ollama serve' is running")
+    app.run(host='0.0.0.0', port=port, debug=os.environ.get('FLASK_ENV') != 'production')
