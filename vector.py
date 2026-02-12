@@ -2,12 +2,17 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 import os
 import pandas as pd
+import time
+
+print("[vector.py] Starting initialization...")
+start_time = time.time()
 
 # Use HuggingFace embeddings in production (free, no GPU), Ollama locally
 if os.environ.get("GROQ_API_KEY"):
     from langchain_huggingface import HuggingFaceEmbeddings
+    print("[vector.py] Loading HuggingFace embeddings model...")
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    print("Using HuggingFace embeddings (cloud)")
+    print(f"[vector.py] Embeddings loaded in {time.time() - start_time:.1f}s")
 else:
     from langchain_ollama import OllamaEmbeddings
     embeddings = OllamaEmbeddings(model="mxbai-embed-large")
@@ -39,8 +44,11 @@ vector_store = Chroma(
 )
 
 if add_documents:
+    print(f"[vector.py] Embedding {len(df)} documents into ChromaDB (first run only)...")
     vector_store.add_documents(documents=documents, ids=ids)
+    print(f"[vector.py] Documents embedded in {time.time() - start_time:.1f}s")
     
 retriever = vector_store.as_retriever(
     search_kwargs={"k": 5}
 )
+print(f"[vector.py] Initialization complete in {time.time() - start_time:.1f}s")
