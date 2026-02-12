@@ -234,34 +234,46 @@ const SchemeDetail = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-800">Loading scheme details...</p>
+          <p className="text-sm text-gray-500 mt-1">Please wait</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="alert alert-error">
-          <span>{error}</span>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-sm p-8 max-w-md mx-4 text-center border border-gray-200">
+          <svg className="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Something went wrong</h2>
+          <p className="text-gray-600 mb-6 text-sm">{error}</p>
+          <Link to="/schemes" className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-colors">
+            Back to Schemes
+          </Link>
         </div>
-        <Link to="/schemes" className="btn btn-primary mt-4">
-          Back to Schemes
-        </Link>
       </div>
     );
   }
 
   if (!scheme) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="alert alert-warning">
-          <span>Scheme not found</span>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-sm p-8 max-w-md mx-4 text-center border border-gray-200">
+          <svg className="w-16 h-16 text-amber-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Scheme not found</h2>
+          <p className="text-gray-600 mb-6 text-sm">The scheme you are looking for does not exist.</p>
+          <Link to="/schemes" className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-colors">
+            Back to Schemes
+          </Link>
         </div>
-        <Link to="/schemes" className="btn btn-primary mt-4">
-          Back to Schemes
-        </Link>
       </div>
     );
   }
@@ -275,26 +287,27 @@ const SchemeDetail = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-white">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <div className="breadcrumbs text-sm">
-          <ul>
-            <li><Link to="/" className="text-white">Home</Link></li>
-            <li><Link to="/schemes" className="text-white">Schemes</Link></li>
-            <li className="text-white">{scheme.scheme_name || scheme.schemeName}</li>
-          </ul>
-        </div>
+        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+          <Link to="/" className="hover:text-emerald-600 transition-colors">Home</Link>
+          <svg className="w-3.5 h-3.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+          <Link to="/schemes" className="hover:text-emerald-600 transition-colors">Schemes</Link>
+          <svg className="w-3.5 h-3.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+          <span className="text-gray-800 font-medium truncate">{scheme.scheme_name || scheme.schemeName}</span>
+        </nav>
         
-        <div className="flex justify-between items-start mt-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mt-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 ref={titleTextRef} className="text-4xl font-bold mb-2 text-white">
+              <h1 ref={titleTextRef} className="text-3xl font-bold text-gray-900">
                 {scheme.scheme_name || scheme.schemeName || 'Scheme Details'}
               </h1>
               {ttsAvailable && (
                 <button
-                  className="btn btn-ghost btn-xs btn-circle text-gray-200 hover:text-white"
+                  className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 transition-colors"
                   title={ttsTitlePlaying ? "Stop" : "Read title"}
                   onClick={() => {
                     if (ttsTitlePlaying) {
@@ -310,17 +323,21 @@ const SchemeDetail = () => {
                 </button>
               )}
             </div>
-            <p className="text-lg opacity-70 text-white">
-              {scheme.schemeCategory} • {scheme.level} Level
+            <p className="text-base text-gray-500 mt-1">
+              {scheme.schemeCategory} &middot; {scheme.level} Level
             </p>
           </div>
           
-          <div className="flex gap-2">
-            <button className="btn btn-primary">
+          <div className="flex flex-wrap gap-2">
+            <button className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-colors">
               Apply Now
             </button>
             <button
-              className={`btn ${isSaved ? 'btn-secondary' : 'btn-outline'}`}
+              className={`px-5 py-2.5 text-sm font-semibold rounded-md border transition-colors ${
+                isSaved
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
               disabled={saving}
               onClick={async () => {
                 if (!isSignedIn) {
@@ -347,14 +364,14 @@ const SchemeDetail = () => {
               {isSaved ? 'Saved' : 'Save'}
             </button>
             <button
-              className="btn btn-accent"
+              className="px-5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-md border border-emerald-200 transition-colors"
               onClick={handleCheckEligibility}
               disabled={eligibilityLoading}
             >
               {eligibilityLoading ? 'Loading...' : 'Check Eligibility'}
             </button>
             <button 
-              className="btn btn-outline"
+              className="px-5 py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-semibold rounded-md transition-colors"
               onClick={() => navigate(-1)}
             >
               Back
@@ -364,12 +381,16 @@ const SchemeDetail = () => {
       </div>
 
       {/* Sticky Tabs */}
-      <div className="sticky top-0 z-10 bg-base-100 pt-4 pb-4 mb-8">
-        <div className="tabs tabs-boxed">
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 pt-4 pb-0 mb-8">
+        <div className="flex gap-1 overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`tab ${activeTab === tab.id ? 'tab-active' : ''}`}
+              className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? 'border-emerald-600 text-emerald-700'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
               onClick={() => handleTabClick(tab.id)}
             >
               {tab.label}
@@ -383,14 +404,13 @@ const SchemeDetail = () => {
         
         {/* Overview Section */}
         <div ref={overviewRef} id="overview-section" className="scroll-mt-32">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <h2 className="card-title text-2xl">Overview</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Overview</h2>
                 {ttsAvailable && (
                   <>
                     <button
-                      className="btn btn-ghost btn-xs btn-circle text-gray-200 hover:text-white"
+                      className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 transition-colors"
                       title={ttsOverviewPlaying ? "Stop" : "Read overview"}
                       onClick={() => {
                         if (ttsOverviewPlaying) {
@@ -408,24 +428,24 @@ const SchemeDetail = () => {
                 )}
               </div>
               <div className="space-y-4">
-                <p ref={overviewTextRef} className="text-white text-lg">{scheme.details || 'No detailed description available.'}</p>
+                <p ref={overviewTextRef} className="text-gray-700 text-base leading-relaxed">{scheme.details || 'No detailed description available.'}</p>
                 
                 <div className="flex flex-wrap gap-2">
                   {scheme.schemeCategory && (
-                    <div className="badge badge-primary badge-lg">{scheme.schemeCategory}</div>
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-300">{scheme.schemeCategory}</span>
                   )}
                   
                   {scheme.level && (
-                    <div className="badge badge-secondary badge-lg">{scheme.level}</div>
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-300">{scheme.level}</span>
                   )}
                   
                   {/* Display tags as badges */}
                   {scheme.tags && scheme.tags.length > 0 && (
                     <>
                       {scheme.tags.map((tag, index) => (
-                        <div key={index} className="badge badge-outline badge-accent">
+                        <span key={index} className="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600 border border-gray-300">
                           #{tag}
-                        </div>
+                        </span>
                       ))}
                     </>
                   )}
@@ -433,25 +453,23 @@ const SchemeDetail = () => {
                 
                 {scheme.ministry && (
                   <div className="mt-4">
-                    <span className="font-semibold text-white">Ministry: </span>
-                    <span className="text-white">{scheme.ministry}</span>
+                    <span className="font-semibold text-gray-900">Ministry: </span>
+                    <span className="text-gray-700">{scheme.ministry}</span>
                   </div>
                 )}
               </div>
-            </div>
           </div>
         </div>
 
         {/* Benefits Section */}
         <div ref={benefitsRef} id="benefits-section" className="scroll-mt-32">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <h2 className="card-title text-2xl">Benefits</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Benefits</h2>
                 {scheme.benefits && (
                   <>
                     <button
-                      className="btn btn-ghost btn-xs btn-circle text-gray-200 hover:text-white"
+                      className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 transition-colors"
                       title={ttsBenefitsPlaying ? "Stop" : "Read benefits"}
                       onClick={() => {
                         if (ttsBenefitsPlaying) {
@@ -470,55 +488,61 @@ const SchemeDetail = () => {
               </div>
               <div className="space-y-4">
                 {scheme.benefits ? (
-                  <p ref={benefitsTextRef} className="text-white text-lg">{scheme.benefits}</p>
+                  <p ref={benefitsTextRef} className="text-gray-700 text-base leading-relaxed">{scheme.benefits}</p>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-start space-x-3">
-                      <div className="badge badge-success">✓</div>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 mt-0.5">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      </span>
                       <div>
-                        <h4 className="font-semibold text-white">Financial Support</h4>
-                        <p className="text-sm opacity-70 text-white">Direct financial assistance for eligible farmers</p>
+                        <h4 className="font-semibold text-gray-900">Financial Support</h4>
+                        <p className="text-sm text-gray-500">Direct financial assistance for eligible farmers</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <div className="badge badge-success">✓</div>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 mt-0.5">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      </span>
                       <div>
-                        <h4 className="font-semibold text-white">Subsidies</h4>
-                        <p className="text-sm opacity-70 text-white">Government subsidies on agricultural equipment</p>
+                        <h4 className="font-semibold text-gray-900">Subsidies</h4>
+                        <p className="text-sm text-gray-500">Government subsidies on agricultural equipment</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <div className="badge badge-success">✓</div>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 mt-0.5">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      </span>
                       <div>
-                        <h4 className="font-semibold text-white">Training</h4>
-                        <p className="text-sm opacity-70 text-white">Free training and skill development programs</p>
+                        <h4 className="font-semibold text-gray-900">Training</h4>
+                        <p className="text-sm text-gray-500">Free training and skill development programs</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <div className="badge badge-success">✓</div>
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex-shrink-0 mt-0.5">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      </span>
                       <div>
-                        <h4 className="font-semibold text-white">Insurance Coverage</h4>
-                        <p className="text-sm opacity-70 text-white">Crop insurance and risk coverage</p>
+                        <h4 className="font-semibold text-gray-900">Insurance Coverage</h4>
+                        <p className="text-sm text-gray-500">Crop insurance and risk coverage</p>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
-            </div>
           </div>
         </div>
 
         {/* Eligibility Section */}
         <div ref={eligibilityRef} id="eligibility-section" className="scroll-mt-32">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
-                  <h2 className="card-title text-2xl">Eligibility Criteria</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">Eligibility Criteria</h2>
                   {scheme.eligibility && (
                     <>
                       <button
-                        className="btn btn-ghost btn-xs btn-circle text-gray-200 hover:text-white"
+                        className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 transition-colors"
                         title={ttsEligibilityPlaying ? "Stop" : "Read eligibility"}
                         onClick={() => {
                           if (ttsEligibilityPlaying) {
@@ -536,19 +560,17 @@ const SchemeDetail = () => {
                   )}
                 </div>
                 <button
-                  className="btn btn-accent btn-sm"
+                  className="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-md border border-emerald-200 transition-colors"
                   onClick={handleCheckEligibility}
                   disabled={eligibilityLoading}
                 >
                   {eligibilityLoading ? (
                     <>
-                      <span className="loading loading-spinner loading-xs"></span>
+                      <span className="animate-spin inline-block w-3 h-3 border-2 border-emerald-600 border-t-transparent rounded-full mr-2"></span>
                       Loading...
                     </>
                   ) : (
-                    <>
-                      ✓ Check Eligibility
-                    </>
+                    'Check Eligibility'
                   )}
                 </button>
               </div>
@@ -556,17 +578,16 @@ const SchemeDetail = () => {
                 {(
                   <>
                     {scheme.eligibility && (
-                      <p ref={eligibilityTextRef} className="text-white text-lg">{scheme.eligibility}</p>
+                      <p ref={eligibilityTextRef} className="text-gray-700 text-base leading-relaxed">{scheme.eligibility}</p>
                     )}
-                    <div className="alert">
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
                       <div className="flex flex-col gap-2">
-                        <span className="text-white">Click the "Check Eligibility" button to answer a few yes/no questions and instantly know your eligibility status.</span>
+                        <span className="text-gray-700 text-sm">Click the "Check Eligibility" button to answer a few yes/no questions and instantly know your eligibility status.</span>
                       </div>
                     </div>
                   </>
                 )}
               </div>
-            </div>
           </div>
         </div>
 
@@ -574,14 +595,13 @@ const SchemeDetail = () => {
 
         {/* Application Process Section */}
         <div ref={applicationRef} id="application-section" className="scroll-mt-32">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <h2 className="card-title text-2xl">Application Process</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Application Process</h2>
                 {scheme.application && (
                   <>
                     <button
-                      className="btn btn-ghost btn-xs btn-circle text-gray-200 hover:text-white"
+                      className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 transition-colors"
                       title={ttsApplicationPlaying ? "Stop" : "Read application process"}
                       onClick={() => {
                         if (ttsApplicationPlaying) {
@@ -600,51 +620,49 @@ const SchemeDetail = () => {
               </div>
               <div className="space-y-4">
                 {scheme.application ? (
-                  <p ref={applicationTextRef} className="text-white text-lg">{scheme.application}</p>
+                  <p ref={applicationTextRef} className="text-gray-700 text-base leading-relaxed">{scheme.application}</p>
                 ) : (
                   <div className="space-y-3">
-                    <div className="alert alert-info">
-                      <span>Check if you meet the following criteria:</span>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <span className="text-gray-700 text-sm">Check if you meet the following criteria:</span>
                     </div>
                     <ul className="space-y-3">
                       <li className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <span className="text-white">Must be a registered farmer with valid documents</span>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">Must be a registered farmer with valid documents</span>
                       </li>
                       <li className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <span className="text-white">Age between 18-60 years</span>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">Age between 18-60 years</span>
                       </li>
                       <li className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <span className="text-white">Must have valid land ownership documents</span>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">Must have valid land ownership documents</span>
                       </li>
                       <li className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <span className="text-white">Annual income below specified limit</span>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">Annual income below specified limit</span>
                       </li>
                       <li className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <span className="text-white">Must belong to eligible category (if applicable)</span>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">Must belong to eligible category (if applicable)</span>
                       </li>
                     </ul>
                   </div>
                 )}
               </div>
-            </div>
           </div>
         </div>
 
         {/* Required Documents Section */}
         <div ref={documentsRef} id="documents-section" className="scroll-mt-32">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <h2 className="card-title text-2xl">Required Documents</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Required Documents</h2>
                 {scheme.documents && (
                   <>
                     <button
-                      className="btn btn-ghost btn-xs btn-circle text-gray-200 hover:text-white"
+                      className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 transition-colors"
                       title={ttsDocumentsPlaying ? "Stop" : "Read documents"}
                       onClick={() => {
                         if (ttsDocumentsPlaying) {
@@ -662,8 +680,8 @@ const SchemeDetail = () => {
                 )}
               </div>
               <div className="space-y-4">
-                <div className="alert alert-warning">
-                  <span>Please ensure all documents are valid and clearly readable</span>
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <span className="text-gray-700 text-sm">Please ensure all documents are valid and clearly readable</span>
                 </div>
                 {(() => {
                   const parsed = mapToDocObjects(splitIntoDocuments(scheme?.documents));
@@ -675,30 +693,30 @@ const SchemeDetail = () => {
                   };
                   return (
                     <div ref={documentsTextRef} className="overflow-x-auto">
-                      <table className="table">
+                      <table className="w-full text-left">
                         <thead>
-                          <tr>
-                            <th className="text-white">Document</th>
-                            <th className="text-white">Required</th>
-                            <th className="text-white">Uploaded</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="text-gray-600 text-sm font-semibold py-3 pr-4">Document</th>
+                            <th className="text-gray-600 text-sm font-semibold py-3 pr-4">Required</th>
+                            <th className="text-gray-600 text-sm font-semibold py-3">Uploaded</th>
                           </tr>
                         </thead>
                         <tbody>
                           {(parsed.length > 0 ? parsed : [
                             { name: 'No documents information available for this scheme.', required: false, description: '' }
                           ]).map((doc, idx) => (
-                            <tr key={idx}>
-                              <td className="font-medium text-white">{doc.name}</td>
-                              <td>
-                                <div className={`badge ${doc.required ? 'badge-error' : 'badge-warning'}`}>
+                            <tr key={idx} className="border-b border-gray-100">
+                              <td className="font-medium text-gray-800 py-3 pr-4">{doc.name}</td>
+                              <td className="py-3 pr-4">
+                                <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-medium border ${doc.required ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
                                   {doc.required ? 'Required' : 'Optional'}
-                                </div>
+                                </span>
                               </td>
-                              <td>
+                              <td className="py-3">
                                 {isUploadedMatch(doc.name) ? (
-                                  <div className="badge badge-success">Yes</div>
+                                  <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Yes</span>
                                 ) : (
-                                  <div className="badge">No</div>
+                                  <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">No</span>
                                 )}
                               </td>
                             </tr>
@@ -709,45 +727,42 @@ const SchemeDetail = () => {
                   );
                 })()}
               </div>
-            </div>
           </div>
         </div>
 
         {/* Contact Information */}
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title text-2xl mb-4">Contact Information</h2>
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold text-white mb-2">Helpline Number</h4>
-                <p className="text-primary text-lg">1800-XXX-XXXX</p>
-                <p className="text-sm opacity-70 text-white">Toll-free, 24/7 support</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Helpline Number</h4>
+                <p className="text-emerald-600 text-lg">1800-XXX-XXXX</p>
+                <p className="text-sm text-gray-500">Toll-free, 24/7 support</p>
               </div>
               
               <div>
-                <h4 className="font-semibold text-white mb-2">Email Support</h4>
-                <p className="text-primary text-lg">support@farmerschemes.gov.in</p>
-                <p className="text-sm opacity-70 text-white">Response within 24 hours</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Email Support</h4>
+                <p className="text-emerald-600 text-lg">support@farmerschemes.gov.in</p>
+                <p className="text-sm text-gray-500">Response within 24 hours</p>
               </div>
             </div>
-          </div>
         </div>
       </div>
       
       {/* Debug Info */}
       <div className="mt-8">
-        <div className="collapse collapse-arrow">
-          <input type="checkbox" /> 
-          <div className="collapse-title text-xl font-medium text-white">
+        <details className="bg-white rounded-lg border border-gray-200">
+          <summary className="px-6 py-4 cursor-pointer text-lg font-medium text-gray-700 hover:text-gray-900 transition-colors">
             Debug Info
-          </div>
-          <div className="collapse-content"> 
-            <pre className="bg-base-200 p-4 rounded text-sm overflow-auto">
+          </summary>
+          <div className="px-6 pb-6">
+            <pre className="bg-gray-50 border border-gray-200 p-4 rounded-lg text-sm overflow-auto text-gray-700">
               {JSON.stringify(scheme, null, 2)}
             </pre>
           </div>
-        </div>
+        </details>
       </div>
+    </div>
     </div>
   );
 };

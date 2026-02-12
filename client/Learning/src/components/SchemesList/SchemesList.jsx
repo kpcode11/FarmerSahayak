@@ -264,45 +264,30 @@ const SchemesList = () => {
     return pages;
   };
 
-  const getCategoryIcon = (category) => {
+  const getCategoryBadgeColor = (category) => {
     switch (category?.toLowerCase()) {
-      case 'agriculture': return '🌾';
-      case 'insurance': return '🛡️';
-      case 'education': return '📚';
-      case 'healthcare': return '🏥';
-      case 'housing': return '🏠';
-      case 'employment': return '💼';
-      default: return '📋';
-    }
-  };
-
-  const getCategoryColor = (category) => {
-    switch (category?.toLowerCase()) {
-      case 'agriculture': return 'from-green-500 to-emerald-600';
-      case 'insurance': return 'from-blue-500 to-cyan-600';
-      case 'education': return 'from-purple-500 to-pink-600';
-      case 'healthcare': return 'from-red-500 to-rose-600';
-      case 'housing': return 'from-orange-500 to-amber-500';
-      case 'employment': return 'from-indigo-500 to-blue-600';
-      default: return 'from-gray-500 to-slate-600';
-    }
-  };
-
-  const getLevelColor = (level) => {
-    switch (level?.toLowerCase()) {
-      case 'central': return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
-      case 'state': return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
-      default: return 'bg-gray-600/20 text-gray-300 border-gray-500/30';
+      case 'agriculture': return 'bg-emerald-100 text-emerald-700 border-emerald-300';
+      case 'insurance': return 'bg-blue-100 text-blue-700 border-blue-300';
+      case 'education': return 'bg-purple-100 text-purple-700 border-purple-300';
+      case 'healthcare': return 'bg-red-100 text-red-700 border-red-300';
+      case 'housing': return 'bg-orange-100 text-orange-700 border-orange-300';
+      case 'employment': return 'bg-indigo-100 text-indigo-700 border-indigo-300';
+      case 'financial aid': return 'bg-teal-100 text-teal-700 border-teal-300';
+      case 'credit / loans': return 'bg-amber-100 text-amber-700 border-amber-300';
+      case 'machinery': return 'bg-cyan-100 text-cyan-700 border-cyan-300';
+      case 'irrigation': return 'bg-sky-100 text-sky-700 border-sky-300';
+      case 'livestock': return 'bg-lime-100 text-lime-700 border-lime-300';
+      default: return 'bg-gray-100 text-gray-700 border-gray-300';
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-400 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-300">Loading schemes...</p>
-          <p className="text-gray-500">Please wait while we fetch the latest schemes for you</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-800">Loading schemes...</p>
+          <p className="text-sm text-gray-500 mt-1">Please wait while we fetch the latest schemes</p>
         </div>
       </div>
     );
@@ -310,14 +295,16 @@ const SchemesList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="bg-gray-800 rounded-lg shadow-xl p-8 max-w-md mx-4 text-center border border-gray-700">
-          <div className="text-red-400 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-100 mb-2">Oops! Something went wrong</h2>
-          <p className="text-gray-400 mb-6">{error}</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-sm p-8 max-w-md mx-4 text-center border border-gray-200">
+          <svg className="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Something went wrong</h2>
+          <p className="text-gray-600 mb-6 text-sm">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="bg-gray-700 hover:bg-gray-600 text-gray-100 px-6 py-3 rounded-lg font-medium transition-colors duration-200 border border-gray-600"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-colors"
           >
             Try Again
           </button>
@@ -327,191 +314,67 @@ const SchemesList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Hero Header */}
-      <section className="relative bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white overflow-hidden">
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-6 py-8">
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white font-semibold text-sm mb-6 border border-blue-500/50 shadow-lg">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              Government Schemes Portal
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
-              <span className="block bg-gradient-to-r from-white via-gray-100 to-gray-200 bg-clip-text text-transparent">Government Schemes</span>
-              <span className="block bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">for Every Farmer</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto mb-10 font-light">
-              Discover hundreds of government schemes designed to support farmers across India. 
-              Find the right scheme for your needs with our advanced filtering system.
-            </p>
+          {/* ===== LEFT SIDEBAR ===== */}
+          <aside className="w-full lg:w-56 flex-shrink-0">
+            <form onSubmit={handleSearchSubmit} className="space-y-7">
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              <div className="bg-gradient-to-br from-gray-700/50 to-gray-800/50 backdrop-blur-sm rounded-2xl p-6 text-center border border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div className="text-3xl mb-2">📊</div>
-                <div className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-1">{totalSchemes || '500+'}</div>
-                <div className="text-sm text-gray-300 font-medium">Total Schemes</div>
-              </div>
-              <div className="bg-gradient-to-br from-gray-700/50 to-gray-800/50 backdrop-blur-sm rounded-2xl p-6 text-center border border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div className="text-3xl mb-2">🗺️</div>
-                <div className="text-3xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-1">28</div>
-                <div className="text-sm text-gray-300 font-medium">States Covered</div>
-              </div>
-              <div className="bg-gradient-to-br from-gray-700/50 to-gray-800/50 backdrop-blur-sm rounded-2xl p-6 text-center border border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div className="text-3xl mb-2">📋</div>
-                <div className="text-3xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">10+</div>
-                <div className="text-sm text-gray-300 font-medium">Categories</div>
-              </div>
-              <div className="bg-gradient-to-br from-gray-700/50 to-gray-800/50 backdrop-blur-sm rounded-2xl p-6 text-center border border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div className="text-3xl mb-2">✅</div>
-                <div className="text-3xl font-extrabold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-1">95%</div>
-                <div className="text-sm text-gray-300 font-medium">Success Rate</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        
-        {/* Advanced Search & Filters */}
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700 mb-10 overflow-hidden">
-          <div className="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-5 border-b border-gray-600">
-            <h2 className="text-2xl font-bold text-gray-100 flex items-center">
-              <svg className="w-7 h-7 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              Find Your Perfect Scheme
-            </h2>
-          </div>
-          
-          <div className="p-8">
-            <form onSubmit={handleSearchSubmit} className="space-y-6">
-              {/* Search Bar */}
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+              {/* Level / Location Filter */}
+              <div>
+                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">State / Location</h4>
+                <div className="relative">
+                  <select
+                    value={uiLevel}
+                    onChange={(e) => { setUiLevel(e.target.value); }}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white appearance-none cursor-pointer focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                  >
+                    <option value="all">All India (Central)</option>
+                    <option value="State">State Level</option>
+                    <option value="Central">Central Level</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                 </div>
+              </div>
+
+              {/* Category Filter */}
+              <div>
+                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Category</h4>
                 <input
-                  type="search"
-                  value={uiQ}
-                  onChange={(e) => setUiQ(e.target.value)}
-                  placeholder="Search schemes by name, description, or benefits..."
-                  className="w-full pl-14 pr-4 py-5 text-lg border-2 border-gray-600 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200 bg-gray-700/50 text-gray-100 placeholder-gray-400 backdrop-blur-sm"
+                  type="text"
+                  value={uiSchemeCategory}
+                  onChange={(e) => setUiSchemeCategory(e.target.value)}
+                  placeholder="e.g. Agriculture"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
                 />
               </div>
 
-              {/* Filter Grid */}
-              <div className="grid md:grid-cols-4 gap-5">
-                <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-300 mb-2.5">
-                    <svg className="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-                      <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                    </svg>
-                    Level
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={uiLevel}
-                      onChange={(e) => setUiLevel(e.target.value)}
-                      className="w-full px-4 py-3.5 border-2 border-gray-600 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none bg-gray-700/50 text-gray-100 appearance-none cursor-pointer transition-all duration-200 backdrop-blur-sm"
-                    >
-                      <option value="all">All Levels</option>
-                      <option value="State">🏢 State Level</option>
-                      <option value="Central">🏛️ Central Level</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-300 mb-2.5">
-                    <svg className="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                    </svg>
-                    Category
-                  </label>
-                  <input
-                    type="text"
-                    value={uiSchemeCategory}
-                    onChange={(e) => setUiSchemeCategory(e.target.value)}
-                    placeholder="e.g. Agriculture, Insurance"
-                    className="w-full px-4 py-3.5 border-2 border-gray-600 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none bg-gray-700/50 text-gray-100 placeholder-gray-400 transition-all duration-200 backdrop-blur-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-300 mb-2.5">
-                    <svg className="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                    </svg>
-                    Tags
-                  </label>
-                  <input
-                    type="text"
-                    value={uiTags}
-                    onChange={(e) => setUiTags(e.target.value)}
-                    placeholder="comma,separated,tags"
-                    className="w-full px-4 py-3.5 border-2 border-gray-600 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none bg-gray-700/50 text-gray-100 placeholder-gray-400 transition-all duration-200 backdrop-blur-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="flex items-center text-sm font-semibold text-gray-300 mb-2.5">
-                    <svg className="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
-                    </svg>
-                    Sort By
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={uiSort}
-                      onChange={(e) => setUiSort(e.target.value)}
-                      className="w-full px-4 py-3.5 border-2 border-gray-600 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none bg-gray-700/50 text-gray-100 appearance-none cursor-pointer transition-all duration-200 backdrop-blur-sm"
-                    >
-                      <option value="createdAt:desc">📅 Newest First</option>
-                      <option value="createdAt:asc">📅 Oldest First</option>
-                      <option value="scheme_name:asc">🔤 Name A-Z</option>
-                      <option value="scheme_name:desc">🔤 Name Z-A</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+              {/* Tags Filter */}
+              <div>
+                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Tags</h4>
+                <input
+                  type="text"
+                  value={uiTags}
+                  onChange={(e) => setUiTags(e.target.value)}
+                  placeholder="comma,separated"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                />
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* Apply & Clear */}
+              <div className="space-y-2 pt-2">
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center shadow-lg hover:shadow-xl border border-blue-500"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-3 rounded-lg transition-colors"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  Search Schemes
+                  Apply Filters
                 </button>
-                
                 <button
                   type="button"
                   onClick={() => {
@@ -527,330 +390,322 @@ const SchemesList = () => {
                     setSort("createdAt:desc");
                     setCurrentPage(1);
                   }}
-                  className="px-8 py-4 border-2 border-gray-600 hover:border-gray-500 hover:bg-gray-700/50 text-gray-300 hover:text-white rounded-xl font-semibold transition-all duration-200 flex items-center justify-center backdrop-blur-sm"
+                  className="w-full border border-gray-300 hover:bg-gray-50 text-gray-600 text-sm font-semibold py-3 rounded-lg transition-colors"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                  </svg>
-                  Clear Filters
+                  Clear All
                 </button>
               </div>
 
               {/* Active Filters */}
               {(level !== "all" || schemeCategory || tags || q) && (
-                <div className="bg-gradient-to-r from-gray-700/50 to-gray-800/50 rounded-xl p-5 border border-gray-600 backdrop-blur-sm">
-                  <p className="text-sm font-semibold text-gray-200 mb-3 flex items-center">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
-                    </svg>
-                    Active Filters:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
+                <div className="pt-2 border-t border-gray-200">
+                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Active Filters</h4>
+                  <div className="flex flex-wrap gap-1.5">
                     {level !== "all" && (
-                      <span className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white border border-blue-500 shadow-md">
-                        Level: {level}
+                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {level}
                       </span>
                     )}
                     {schemeCategory && (
-                      <span className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-emerald-600 to-teal-600 text-white border border-emerald-500 shadow-md">
-                        Category: {schemeCategory}
+                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {schemeCategory}
                       </span>
                     )}
                     {tags && (
-                      <span className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white border border-purple-500 shadow-md">
-                        Tags: {tags}
+                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {tags}
                       </span>
                     )}
                     {q && (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-600 text-gray-200 border border-gray-500">
-                        Search: {q}
+                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        &quot;{q}&quot;
                       </span>
                     )}
                   </div>
                 </div>
               )}
             </form>
-          </div>
-        </div>
+          </aside>
 
-        {/* Results Summary */}
-        <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-8 border border-gray-700">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-100">
-                {totalSchemes > 0 ? (
-                  <>Found <span className="text-gray-300">{totalSchemes}</span> schemes matching your criteria</>
-                ) : (
-                  'No schemes found'
-                )}
-              </h3>
-              {totalSchemes > 0 && (
-                <p className="text-gray-400">
-                  Showing {schemes.length} schemes on page {currentPage} of {totalPages}
+          {/* ===== MAIN CONTENT ===== */}
+          <main className="flex-1 min-w-0">
+
+            {/* Header Row */}
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Active Schemes</h1>
+                <p className="text-base text-gray-500 mt-1">
+                  {totalSchemes > 0
+                    ? `Showing ${totalSchemes} schemes based on your preferences`
+                    : 'No schemes found'}
                 </p>
-              )}
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-300">Show:</label>
-              <select
-                value={limit}
-                onChange={handleLimitChange}
-                className="px-3 py-2 border border-gray-600 rounded-lg focus:border-gray-500 focus:outline-none bg-gray-700 text-gray-100"
-              >
-                <option value="5">5 per page</option>
-                <option value="10">10 per page</option>
-                <option value="20">20 per page</option>
-                <option value="50">50 per page</option>
-              </select>
-            </div>
-          </div>
-        </div>
+              </div>
 
-        {/* Schemes Grid */}
-        {schemes.length === 0 && !loading ? (
-          <div className="bg-gray-800 rounded-xl shadow-lg p-12 text-center border border-gray-700">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold text-gray-100 mb-2">No Schemes Found</h3>
-            <p className="text-gray-400 mb-6">
-              Try adjusting your search criteria or clear all filters to see more results.
-            </p>
-            <button
-              onClick={() => {
-                setUiLevel("all");
-                setUiSchemeCategory("");
-                setUiTags("");
-                setUiQ("");
-                setLevel("all");
-                setSchemeCategory("");
-                setTags("");
-                setQ("");
-                setCurrentPage(1);
-              }}
-              className="bg-gray-700 hover:bg-gray-600 text-gray-100 px-6 py-3 rounded-lg font-medium transition-colors duration-200 border border-gray-600"
-            >
-              View All Schemes
-            </button>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {schemes.map((scheme) => (
-              <div
-                key={scheme._id}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-700 overflow-hidden group relative"
-              >
-                {/* Gradient Accent Bar */}
-                <div className={`h-2 bg-gradient-to-r ${getCategoryColor(scheme.schemeCategory)}`}></div>
-                
-                <div className="p-6">
-                  {/* Category & Level Badges */}
-                  {scheme.schemeCategory && (
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className={`p-2 rounded-xl bg-gradient-to-r ${getCategoryColor(scheme.schemeCategory)} shadow-lg`}>
-                        <span className="text-2xl">{getCategoryIcon(scheme.schemeCategory)}</span>
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <span className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-gray-700/80 text-gray-200 border border-gray-600 backdrop-blur-sm">
-                          {scheme.schemeCategory}
-                        </span>
-                        {scheme.level && (
-                          <span className={`inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold border ${getLevelColor(scheme.level)}`}>
-                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-                              <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                            </svg>
-                            {scheme.level}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Title with TTS */}
-                  <div className="flex items-start justify-between gap-2 mb-3">
-                    <h3
-                      ref={(el) => { if (el) titleRefs.current[scheme._id] = el; }}
-                      className="text-xl font-bold text-gray-100 group-hover:text-white transition-colors duration-200 leading-tight"
-                    >
-                      {scheme.scheme_name || scheme.schemeName || "No Name"}
-                    </h3>
-                    {ttsAvailable && (
-                      <button
-                        className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white transition-all duration-200 border border-gray-600 flex-shrink-0"
-                        title={ttsPlayingMap[scheme._id] ? "Stop" : "Read name and summary"}
-                        onClick={() => {
-                          const isPlaying = !!ttsPlayingMap[scheme._id];
-                          if (isPlaying) {
-                            stopSpeaking();
-                            setTtsPlayingMap((s) => ({ ...s, [scheme._id]: false }));
-                          } else {
-                            const nameVis = titleRefs.current[scheme._id]?.innerText || titleRefs.current[scheme._id]?.textContent || (scheme.scheme_name || scheme.schemeName || "");
-                            const sumVis = summaryRefs.current[scheme._id]?.innerText || summaryRefs.current[scheme._id]?.textContent || (scheme.details || "");
-                            const summary = (sumVis || "").trim().slice(0, 220);
-                            const text = summary ? `${nameVis}. ${summary}` : nameVis;
-                            handleSpeak(text);
-                            setTtsPlayingMap((s) => ({ ...s, [scheme._id]: true }));
-                          }
-                        }}
-                      >
-                        {ttsPlayingMap[scheme._id] ? <StopIcon /> : <SpeakerIcon />}
-                      </button>
-                    )}
+              <div className="flex items-center gap-3">
+                {/* Search */}
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                   </div>
-
-                  {/* Description */}
-                  {scheme.details && (
-                    <p
-                      ref={(el) => { if (el) summaryRefs.current[scheme._id] = el; }}
-                      className="text-gray-400 text-sm line-clamp-3 mb-4 leading-relaxed"
-                    >
-                      {scheme.details.length > 150 
-                        ? `${scheme.details.substring(0, 150)}...`
-                        : scheme.details
-                      }
-                    </p>
-                  )}
-
-                  {/* Tags */}
-                  {scheme.tags && scheme.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      {scheme.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-gray-700 to-gray-600 text-gray-200 text-xs font-medium rounded-full border border-gray-600 hover:border-gray-500 transition-colors"
-                        >
-                          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                          </svg>
-                          {tag}
-                        </span>
-                      ))}
-                      {scheme.tags.length > 3 && (
-                        <span className="inline-flex items-center px-3 py-1 bg-gray-700/50 text-gray-400 text-xs font-medium rounded-full border border-gray-600">
-                          +{scheme.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Action Buttons */}
-                  <div className="space-y-2.5">
-                    <Link
-                      to={`/schemes/${scheme._id}`}
-                      className="inline-flex items-center justify-center w-full bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 text-white px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 transform group-hover:scale-105 shadow-lg hover:shadow-xl border border-gray-600"
-                    >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                      View Full Details
-                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </Link>
-                    
-                    <button
-                      onClick={() => handleSaveToggle(scheme._id)}
-                      disabled={savingStates[scheme._id]}
-                      className={`w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 border flex items-center justify-center ${
-                        savedSchemes.has(scheme._id)
-                          ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-emerald-500 shadow-lg'
-                          : 'bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 border-gray-600 hover:border-gray-500'
-                      } ${savingStates[scheme._id] ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      {savingStates[scheme._id] ? (
-                        <>
-                          <svg className="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Saving...
-                        </>
-                      ) : savedSchemes.has(scheme._id) ? (
-                        <>
-                          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-                          </svg>
-                          Saved
-                        </>
-                      ) : (
-                        <>
-                          <SavedIcon className="w-5 h-5 mr-2" />
-                          Save Scheme
-                        </>
-                      )}
-                    </button>
-                  </div>
+                  <input
+                    type="search"
+                    value={uiQ}
+                    onChange={(e) => { setUiQ(e.target.value); setQ(e.target.value); setCurrentPage(1); }}
+                    placeholder="Search schemes..."
+                    className="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none w-52 sm:w-64 transition-colors"
+                  />
                 </div>
 
-                {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                {/* Sort */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-gray-500 whitespace-nowrap hidden sm:inline">Sort by:</label>
+                  <div className="relative">
+                    <select
+                      value={uiSort}
+                      onChange={(e) => { setUiSort(e.target.value); setSort(e.target.value); setCurrentPage(1); }}
+                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white appearance-none cursor-pointer pr-9 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                    >
+                      <option value="createdAt:desc">Relevance</option>
+                      <option value="createdAt:asc">Oldest</option>
+                      <option value="scheme_name:asc">Name A-Z</option>
+                      <option value="scheme_name:desc">Name Z-A</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 border border-gray-700 backdrop-blur-sm">
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-              {/* Previous Button */}
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 border-2 flex items-center gap-2 ${
-                  currentPage === 1
-                    ? 'bg-gray-700/50 text-gray-500 cursor-not-allowed border-gray-600'
-                    : 'bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 text-white transform hover:scale-105 border-gray-600 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            {/* No Results */}
+            {schemes.length === 0 && !loading ? (
+              <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+                <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                Previous
-              </button>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">No Schemes Found</h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  Try adjusting your search criteria or clear all filters.
+                </p>
+                <button
+                  onClick={() => {
+                    setUiLevel("all"); setUiSchemeCategory(""); setUiTags(""); setUiQ("");
+                    setLevel("all"); setSchemeCategory(""); setTags(""); setQ(""); setCurrentPage(1);
+                  }}
+                  className="text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+                >
+                  View All Schemes
+                </button>
+              </div>
+            ) : (
+              /* ===== SCHEME CARDS GRID ===== */
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                {schemes.map((scheme) => (
+                  <div
+                    key={scheme._id}
+                    className="bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all duration-200 flex flex-col"
+                  >
+                    <div className="p-6 flex flex-col flex-1">
+                      {/* Top: Badge + Level + Save */}
+                      <div className="flex items-start justify-between gap-2 mb-4">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {scheme.schemeCategory && (
+                            <span className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold border ${getCategoryBadgeColor(scheme.schemeCategory)}`}>
+                              {scheme.schemeCategory}
+                            </span>
+                          )}
+                          {scheme.level && (
+                            <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              </svg>
+                              {scheme.level}
+                            </span>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => handleSaveToggle(scheme._id)}
+                          disabled={savingStates[scheme._id]}
+                          className={`flex-shrink-0 p-1.5 rounded-md transition-colors ${
+                            savingStates[scheme._id] ? 'opacity-50 cursor-not-allowed' : ''
+                          } ${
+                            savedSchemes.has(scheme._id)
+                              ? 'text-emerald-600'
+                              : 'text-gray-400 hover:text-gray-600'
+                          }`}
+                          title={savedSchemes.has(scheme._id) ? 'Unsave' : 'Save'}
+                        >
+                          {savingStates[scheme._id] ? (
+                            <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                          ) : savedSchemes.has(scheme._id) ? (
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                            </svg>
+                          ) : (
+                            <SavedIcon className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
 
-              {/* Page Numbers */}
-              <div className="flex items-center gap-3">
+                      {/* Title */}
+                      <h3
+                        ref={(el) => { if (el) titleRefs.current[scheme._id] = el; }}
+                        className="text-base font-bold text-gray-900 leading-snug mb-2"
+                      >
+                        {scheme.scheme_name || scheme.schemeName || "No Name"}
+                      </h3>
+
+                      {/* Description */}
+                      {scheme.details && (
+                        <p
+                          ref={(el) => { if (el) summaryRefs.current[scheme._id] = el; }}
+                          className="text-sm text-gray-500 leading-relaxed mb-5 line-clamp-3 flex-1"
+                        >
+                          {scheme.details.length > 160
+                            ? `${scheme.details.substring(0, 160)}...`
+                            : scheme.details}
+                        </p>
+                      )}
+
+                      {/* Info Rows */}
+                      <div className="space-y-2.5 mb-5">
+                        {scheme.schemeCategory && (
+                          <div className="flex items-start gap-2.5">
+                            <svg className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <div>
+                              <p className="text-xs text-gray-400">Category</p>
+                              <p className="text-sm font-medium text-gray-800">{scheme.schemeCategory}</p>
+                            </div>
+                          </div>
+                        )}
+                        {scheme.tags && scheme.tags.length > 0 && (
+                          <div className="flex items-start gap-2.5">
+                            <svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                            </svg>
+                            <div>
+                              <p className="text-xs text-gray-400">Tags</p>
+                              <p className="text-sm font-medium text-gray-800">{scheme.tags.slice(0, 3).join(', ')}</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer Actions */}
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div className="flex items-center gap-3">
+                          {/* Listen Button */}
+                          {ttsAvailable && (
+                            <button
+                              className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                              title={ttsPlayingMap[scheme._id] ? "Stop" : "Listen"}
+                              onClick={() => {
+                                const isPlaying = !!ttsPlayingMap[scheme._id];
+                                if (isPlaying) {
+                                  stopSpeaking();
+                                  setTtsPlayingMap((s) => ({ ...s, [scheme._id]: false }));
+                                } else {
+                                  const nameVis = titleRefs.current[scheme._id]?.innerText || titleRefs.current[scheme._id]?.textContent || (scheme.scheme_name || scheme.schemeName || "");
+                                  const sumVis = summaryRefs.current[scheme._id]?.innerText || summaryRefs.current[scheme._id]?.textContent || (scheme.details || "");
+                                  const summary = (sumVis || "").trim().slice(0, 220);
+                                  const text = summary ? `${nameVis}. ${summary}` : nameVis;
+                                  handleSpeak(text);
+                                  setTtsPlayingMap((s) => ({ ...s, [scheme._id]: true }));
+                                }
+                              }}
+                            >
+                              {ttsPlayingMap[scheme._id] ? <StopIcon className="w-3.5 h-3.5" /> : <SpeakerIcon className="w-3.5 h-3.5" />}
+                              {ttsPlayingMap[scheme._id] ? 'STOP' : 'LISTEN'}
+                            </button>
+                          )}
+                          {/* <Link
+                            to={`/schemes/${scheme._id}`}
+                            className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
+                          >
+                            View Details
+                          </Link> */}
+                        </div>
+
+                        {/* View Details Button */}
+                        <Link
+                          to={`/schemes/${scheme._id}`}
+                          className="inline-flex items-center px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-colors"
+                        >
+                          View Details
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* ===== PAGINATION ===== */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pb-8">
+                {/* Prev */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
+                    currentPage === 1
+                      ? 'text-gray-300 border-gray-200 cursor-not-allowed'
+                      : 'text-gray-600 border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* Page Numbers */}
                 {getPageNumbers().map((pageNum) => (
                   <button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`w-12 h-12 rounded-xl font-bold transition-all duration-200 border-2 ${
+                    className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm font-medium transition-colors ${
                       currentPage === pageNum
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-xl transform scale-110 border-blue-500'
-                        : 'bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white border-gray-600 hover:border-gray-500'
+                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        : 'text-gray-600 border-gray-300 hover:bg-gray-50'
                     }`}
                   >
                     {pageNum}
                   </button>
                 ))}
+
+                {/* Ellipsis */}
+                {totalPages > 5 && currentPage < totalPages - 2 && (
+                  <span className="w-10 h-10 flex items-center justify-center text-gray-400 text-sm">...</span>
+                )}
+
+                {/* Next */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
+                    currentPage === totalPages
+                      ? 'text-gray-300 border-gray-200 cursor-not-allowed'
+                      : 'text-gray-600 border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
-
-              {/* Next Button */}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 border-2 flex items-center gap-2 ${
-                  currentPage === totalPages
-                    ? 'bg-gray-700/50 text-gray-500 cursor-not-allowed border-gray-600'
-                    : 'bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 text-white transform hover:scale-105 border-gray-600 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                Next
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Page Info */}
-            <div className="text-center mt-6 text-gray-300 font-medium">
-              Page <span className="text-white font-bold">{currentPage}</span> of <span className="text-white font-bold">{totalPages}</span> • 
-              Total <span className="text-white font-bold">{totalSchemes}</span> schemes
-            </div>
-          </div>
-        )}
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );

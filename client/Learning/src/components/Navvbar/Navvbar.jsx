@@ -96,57 +96,50 @@ function Navvbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-lg border-b border-gray-700/50 backdrop-blur-lg">
+    <nav className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
-          <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity group">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            {/* <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-2xl">🌾</span>
+            </div> */}
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-gray-900">
+                Farmer Sahayak
+              </span>
+              <span className="text-xs text-gray-500 uppercase tracking-wide">Govt. of India Initiative</span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-              Farmer Sahayak
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            <Link
-              to="/"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                location.pathname === "/"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "text-gray-300 hover:text-white hover:bg-gray-700"
-              }`}
-            >
-              Home
-            </Link>
+          <div className="hidden md:flex items-center gap-8">
             <Link
               to="/schemes"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === "/schemes"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "text-gray-300 hover:text-white hover:bg-gray-700"
+                  ? "text-emerald-700"
+                  : "text-gray-700 hover:text-emerald-600"
               }`}
             >
               Schemes
             </Link>
             <Link
               to="/maps"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === "/maps"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "text-gray-300 hover:text-white hover:bg-gray-700"
+                  ? "text-emerald-700"
+                  : "text-gray-700 hover:text-emerald-600"
               }`}
             >
               Help Centers
             </Link>
             <Link
               to="/chatbot"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`text-sm font-medium transition-colors duration-200 ${
                 location.pathname === "/chatbot"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "text-gray-300 hover:text-white hover:bg-gray-700"
+                  ? "text-emerald-700"
+                  : "text-gray-700 hover:text-emerald-600"
               }`}
             >
               AI Assistant
@@ -158,7 +151,7 @@ function Navvbar() {
             {/* Language Selector */}
             <div className="relative">
               <select
-                className="pl-3 pr-8 py-2 bg-gray-700 text-gray-200 border border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-600 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none appearance-none cursor-pointer"
+                className="pl-3 pr-8 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:border-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none appearance-none cursor-pointer"
                 onChange={(e) => {
                   const lang = e.target.value;
                   if (window.setLanguage) window.setLanguage(lang);
@@ -166,22 +159,22 @@ function Navvbar() {
                 }}
                 defaultValue="en"
               >
-                <option value="en">🇬🇧 EN</option>
-                <option value="hi">🇮🇳 हिं</option>
-                <option value="bn">🇮🇳 বাং</option>
-                <option value="te">🇮🇳 తె</option>
-                <option value="mr">🇮🇳 मरा</option>
-                <option value="ta">🇮🇳 த</option>
-                <option value="ur">🇮🇳 اردو</option>
-                <option value="gu">🇮🇳 ગુ</option>
-                <option value="kn">🇮🇳 ಕ</option>
-                <option value="ml">🇮🇳 മ</option>
-                <option value="pa">🇮🇳 ਪੰ</option>
-                <option value="or">🇮🇳 ଓ</option>
-                <option value="as">🇮🇳 অ</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="bn">বাংলা</option>
+                <option value="te">తెలుగు</option>
+                <option value="mr">मराठी</option>
+                <option value="ta">தமிழ்</option>
+                <option value="ur">اردو</option>
+                <option value="gu">ગુજરાતી</option>
+                <option value="kn">ಕನ್ನಡ</option>
+                <option value="ml">മലയാളം</option>
+                <option value="pa">ਪੰਜਾਬੀ</option>
+                <option value="or">ଓଡ଼ିଆ</option>
+                <option value="as">অসমীয়া</option>
               </select>
               <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -194,8 +187,8 @@ function Navvbar() {
                   onClick={() => navigate("/saved-schemes")}
                   className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                     location.pathname === "/saved-schemes"
-                      ? "bg-emerald-600 text-white shadow-lg"
-                      : "bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                      : "text-gray-700 hover:bg-gray-50 border border-gray-300"
                   }`}
                   title="View Saved Schemes"
                 >
@@ -207,7 +200,7 @@ function Navvbar() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="flex items-center gap-1 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-all"
+                    className="flex items-center gap-1 p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
                     title="Profile"
                   >
                     {user?.imageUrl ? (
@@ -224,9 +217,9 @@ function Navvbar() {
                   </button>
 
                   {profileDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-xl shadow-xl animate-fade-in z-50">
+                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl animate-fade-in z-50">
                       {/* User info header */}
-                      <div className="px-4 py-3 border-b border-gray-700">
+                      <div className="px-4 py-3 border-b border-gray-200">
                         <div className="flex items-center gap-3">
                           {user?.imageUrl ? (
                             <img
@@ -241,15 +234,15 @@ function Navvbar() {
                             </div>
                           )}
                           <div className="overflow-hidden">
-                            <p className="text-sm font-semibold text-white truncate">{user?.name || "User"}</p>
-                            <p className="text-xs text-gray-400 truncate">{user?.email || ""}</p>
+                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "User"}</p>
+                            <p className="text-xs text-gray-600 truncate">{user?.email || ""}</p>
                           </div>
                         </div>
                       </div>
                       <Link
                         to="/profile"
                         onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-3 text-gray-200 hover:bg-gray-700 transition-colors"
+                        className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                       >
                         <ProfileIcon />
                         <span>My Profile</span>
@@ -257,14 +250,14 @@ function Navvbar() {
                       <Link
                         to="/saved-schemes"
                         onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-3 text-gray-200 hover:bg-gray-700 transition-colors sm:hidden"
+                        className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors sm:hidden"
                       >
                         <SavedIcon />
                         <span>Saved Schemes</span>
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 w-full px-4 py-3 text-red-400 hover:bg-gray-700 rounded-b-xl transition-colors"
+                        className="flex items-center gap-2 w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-b-xl transition-colors"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -278,16 +271,16 @@ function Navvbar() {
             ) : (
               <Link
                 to="/login"
-                className="px-5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm hover:shadow transition-all"
               >
-                Login
+                Login / Register
               </Link>
             )}
 
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-all"
+              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -298,26 +291,15 @@ function Navvbar() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-700">
+          <div className="md:hidden py-4 border-t border-gray-200">
             <div className="space-y-1">
-              <Link
-                to="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  location.pathname === "/"
-                    ? "bg-emerald-600 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-gray-700"
-                }`}
-              >
-                Home
-              </Link>
               <Link
                 to="/schemes"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/schemes"
-                    ? "bg-emerald-600 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-gray-700"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
                 Schemes
@@ -327,8 +309,8 @@ function Navvbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/maps"
-                    ? "bg-emerald-600 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-gray-700"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
                 Help Centers
@@ -338,8 +320,8 @@ function Navvbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   location.pathname === "/chatbot"
-                    ? "bg-emerald-600 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-gray-700"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
                 AI Assistant
