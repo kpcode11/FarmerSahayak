@@ -1,6 +1,5 @@
-@import "tailwindcss";
-@plugin "flowbite-react/plugin/tailwindcss";
-@source "../.flowbite-react/class-list.json";
+/* App.css — minimal overrides, tokens come from index.css */
+
 .schemes-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -15,29 +14,31 @@
 }
 
 .scheme-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  box-shadow: var(--shadow-level1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .scheme-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
 }
 
 .scheme-card h2 {
   margin-top: 0;
-  color: #333;
+  color: var(--color-ink);
   text-transform: capitalize;
+  font-weight: 500;
 }
 
 .scheme-card h3 {
   margin-top: 15px;
   margin-bottom: 5px;
   font-size: 1rem;
-  color: #555;
+  color: var(--color-ink-mute);
+  font-weight: 500;
 }
 
 .category, .level {
@@ -46,7 +47,7 @@
 }
 
 .category span, .level span {
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .details, .benefits {
@@ -61,9 +62,10 @@
 }
 
 .tag {
-  background-color: #f0f0f0;
+  background-color: var(--color-canvas-soft);
+  border: 1px solid var(--color-hairline);
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   font-size: 0.8rem;
   text-transform: capitalize;
 }
@@ -75,5 +77,5 @@
 }
 
 .error {
-  color: #e53935;
+  color: #dc3545;
 }

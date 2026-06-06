@@ -68,15 +68,13 @@ const router = createBrowserRouter(
       <Route
         path="*"
         element={
-          <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content text-center">
-              <div className="max-w-md">
-                <h1 className="text-5xl font-bold">404</h1>
-                <p className="py-6">Page not found!</p>
-                <a href="/" className="btn btn-primary">
-                  Go Home
-                </a>
-              </div>
+          <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-canvas-soft)' }}>
+            <div className="text-center">
+              <h1 className="text-6xl font-medium mb-4" style={{ color: 'var(--color-ink)', letterSpacing: '-1.92px' }}>404</h1>
+              <p className="text-lg mb-8" style={{ color: 'var(--color-ink-mute)' }}>Page not found!</p>
+              <a href="/" className="btn-primary-cta" style={{ padding: '12px 24px' }}>
+                Go Home
+              </a>
             </div>
           </div>
         }

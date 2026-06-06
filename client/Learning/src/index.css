@@ -1,7 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 @import "tailwindcss";
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
 @plugin "daisyui";
+
+/* ========================================
+   DESIGN SYSTEM TOKENS
+   Supabase-inspired light theme
+   ======================================== */
+
+:root {
+  /* Colors */
+  --color-primary: #3ecf8e;
+  --color-primary-deep: #24b47e;
+  --color-ink: #171717;
+  --color-ink-secondary: #212121;
+  --color-ink-mute: #707070;
+  --color-ink-faint: #b2b2b2;
+  --color-on-primary: #171717;
+  --color-on-dark: #ffffff;
+  --color-canvas: #ffffff;
+  --color-canvas-soft: #fafafa;
+  --color-canvas-night: #1c1c1c;
+  --color-hairline: #dfdfdf;
+  --color-hairline-strong: #c7c7c7;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-xxl: 32px;
+  --space-huge: 64px;
+
+  /* Shadows */
+  --shadow-level1: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Register tokens with Tailwind v4 @theme */
+@theme {
+  --color-primary: #3ecf8e;
+  --color-primary-deep: #24b47e;
+  --color-ink: #171717;
+  --color-ink-secondary: #212121;
+  --color-ink-mute: #707070;
+  --color-ink-faint: #b2b2b2;
+  --color-on-primary: #171717;
+  --color-on-dark: #ffffff;
+  --color-canvas: #ffffff;
+  --color-canvas-soft: #fafafa;
+  --color-canvas-night: #1c1c1c;
+  --color-hairline: #dfdfdf;
+  --color-hairline-strong: #c7c7c7;
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+body {
+  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   TYPOGRAPHY UTILITIES
+   ======================================== */
+
+.text-hero {
+  font-size: 64px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -1.92px;
+}
+
+.text-section-title {
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -1.44px;
+}
+
+.text-card-title {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.text-sub-title {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.42px;
+}
+
+/* ========================================
+   COMPONENT UTILITIES
+   ======================================== */
+
+/* Primary CTA button */
+.btn-primary-cta {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary-cta:hover {
+  background-color: var(--color-primary-deep);
+}
+
+/* Outline button */
+.btn-outline {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-ink-mute);
+}
+
+/* Input fields */
+.input-field {
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 16px;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+}
+
+/* Feature / scheme pill */
+.pill {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 12px;
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-weight: 500;
+}
+
+.pill-filter {
+  background-color: var(--color-canvas-soft);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ========================================
+   LEGACY SCHEME CARD STYLES (updated with tokens)
+   ======================================== */
 
 .schemes-container {
   max-width: 1200px;
@@ -17,29 +207,32 @@
 }
 
 .scheme-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  background-color: var(--color-canvas);
+  box-shadow: var(--shadow-level1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .scheme-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
 }
 
 .scheme-card h2 {
   margin-top: 0;
-  color: #333;
+  color: var(--color-ink);
   text-transform: capitalize;
+  font-weight: 500;
 }
 
 .scheme-card h3 {
   margin-top: 15px;
   margin-bottom: 5px;
   font-size: 1rem;
-  color: #555;
+  color: var(--color-ink-mute);
+  font-weight: 500;
 }
 
 .category,
@@ -50,7 +243,7 @@
 
 .category span,
 .level span {
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .details,
@@ -66,11 +259,13 @@
 }
 
 .tag {
-  background-color: #f0f0f0;
+  background-color: var(--color-canvas-soft);
+  border: 1px solid var(--color-hairline);
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   font-size: 0.8rem;
   text-transform: capitalize;
+  color: var(--color-ink);
 }
 
 .loading,
@@ -82,5 +277,42 @@
 }
 
 .error {
-  color: #e53935;
+  color: #dc3545;
+}
+
+/* ========================================
+   CODE BLOCKS (dark cards for code content)
+   ======================================== */
+
+.code-block {
+  background-color: var(--color-canvas-night);
+  color: var(--color-on-dark);
+  font-family: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Courier New', monospace;
+  font-size: 14px;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Smooth transitions for interactive elements */
+a, button, input, select {
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }

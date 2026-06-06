@@ -266,29 +266,17 @@ const SchemesList = () => {
   };
 
   const getCategoryBadgeColor = (category) => {
-    switch (category?.toLowerCase()) {
-      case 'agriculture': return 'bg-emerald-100 text-emerald-700 border-emerald-300';
-      case 'insurance': return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'education': return 'bg-purple-100 text-purple-700 border-purple-300';
-      case 'healthcare': return 'bg-red-100 text-red-700 border-red-300';
-      case 'housing': return 'bg-orange-100 text-orange-700 border-orange-300';
-      case 'employment': return 'bg-indigo-100 text-indigo-700 border-indigo-300';
-      case 'financial aid': return 'bg-teal-100 text-teal-700 border-teal-300';
-      case 'credit / loans': return 'bg-amber-100 text-amber-700 border-amber-300';
-      case 'machinery': return 'bg-cyan-100 text-cyan-700 border-cyan-300';
-      case 'irrigation': return 'bg-sky-100 text-sky-700 border-sky-300';
-      case 'livestock': return 'bg-lime-100 text-lime-700 border-lime-300';
-      default: return 'bg-gray-100 text-gray-700 border-gray-300';
-    }
+    // Using neutral tones for badges per design system (no extra accent colors as UI colors)
+    return 'border-[var(--color-hairline)] text-[var(--color-ink)]';
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-canvas)' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <p className="text-lg text-gray-800">Loading schemes...</p>
-          <p className="text-sm text-gray-500 mt-1">Please wait while we fetch the latest schemes</p>
+          <div className="animate-spin rounded-full h-12 w-12 mx-auto mb-4" style={{ borderBottom: '2px solid var(--color-primary)' }}></div>
+          <p className="text-lg" style={{ color: 'var(--color-ink)' }}>Loading schemes...</p>
+          <p className="text-sm mt-1" style={{ color: 'var(--color-ink-mute)' }}>Please wait while we fetch the latest schemes</p>
         </div>
       </div>
     );
@@ -296,16 +284,17 @@ const SchemesList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-sm p-8 max-w-md mx-4 text-center border border-gray-200">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-canvas)' }}>
+        <div className="p-8 max-w-md mx-4 text-center" style={{ backgroundColor: 'var(--color-canvas)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-hairline)' }}>
           <svg className="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Something went wrong</h2>
-          <p className="text-gray-600 mb-6 text-sm">{error}</p>
+          <h2 className="text-xl font-medium mb-2" style={{ color: 'var(--color-ink)' }}>Something went wrong</h2>
+          <p className="text-sm mb-6" style={{ color: 'var(--color-ink-mute)' }}>{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-colors"
+            className="btn-primary-cta"
+            style={{ padding: '10px 20px' }}
           >
             Try Again
           </button>
@@ -315,7 +304,7 @@ const SchemesList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-canvas)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-6 py-8">
 
@@ -324,7 +313,8 @@ const SchemesList = () => {
             {/* Mobile filter toggle */}
             <button
               onClick={() => setFiltersOpen(!filtersOpen)}
-              className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-lg mb-4 text-sm font-medium text-gray-700"
+              className="lg:hidden w-full flex items-center justify-between px-4 py-3 mb-4 text-sm font-medium"
+              style={{ backgroundColor: 'var(--color-canvas)', border: '1px solid var(--color-hairline)', borderRadius: 'var(--radius-sm)', color: 'var(--color-ink)' }}
             >
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -341,19 +331,19 @@ const SchemesList = () => {
 
               {/* Level / Location Filter */}
               <div>
-                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">State / Location</h4>
+                <h4 className="text-sm font-medium uppercase tracking-wider mb-3" style={{ color: 'var(--color-ink-mute)' }}>State / Location</h4>
                 <div className="relative">
                   <select
                     value={uiLevel}
                     onChange={(e) => { setUiLevel(e.target.value); }}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white appearance-none cursor-pointer focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                    className="input-field appearance-none cursor-pointer pr-9"
                   >
                     <option value="all">All India (Central)</option>
                     <option value="State">State Level</option>
                     <option value="Central">Central Level</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: 'var(--color-ink-mute)' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -362,25 +352,25 @@ const SchemesList = () => {
 
               {/* Category Filter */}
               <div>
-                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Category</h4>
+                <h4 className="text-sm font-medium uppercase tracking-wider mb-3" style={{ color: 'var(--color-ink-mute)' }}>Category</h4>
                 <input
                   type="text"
                   value={uiSchemeCategory}
                   onChange={(e) => setUiSchemeCategory(e.target.value)}
                   placeholder="e.g. Agriculture"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                  className="input-field"
                 />
               </div>
 
               {/* Tags Filter */}
               <div>
-                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Tags</h4>
+                <h4 className="text-sm font-medium uppercase tracking-wider mb-3" style={{ color: 'var(--color-ink-mute)' }}>Tags</h4>
                 <input
                   type="text"
                   value={uiTags}
                   onChange={(e) => setUiTags(e.target.value)}
                   placeholder="comma,separated"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                  className="input-field"
                 />
               </div>
 
@@ -388,7 +378,8 @@ const SchemesList = () => {
               <div className="space-y-2 pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-3 rounded-lg transition-colors"
+                  className="btn-primary-cta w-full"
+                  style={{ padding: '12px 16px' }}
                 >
                   Apply Filters
                 </button>
@@ -407,7 +398,8 @@ const SchemesList = () => {
                     setSort("createdAt:desc");
                     setCurrentPage(1);
                   }}
-                  className="w-full border border-gray-300 hover:bg-gray-50 text-gray-600 text-sm font-semibold py-3 rounded-lg transition-colors"
+                  className="btn-outline w-full"
+                  style={{ padding: '12px 16px' }}
                 >
                   Clear All
                 </button>
@@ -415,28 +407,20 @@ const SchemesList = () => {
 
               {/* Active Filters */}
               {(level !== "all" || schemeCategory || tags || q) && (
-                <div className="pt-2 border-t border-gray-200">
-                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Active Filters</h4>
+                <div className="pt-2" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+                  <h4 className="text-xs font-medium uppercase tracking-wider mb-2" style={{ color: 'var(--color-ink-mute)' }}>Active Filters</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {level !== "all" && (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {level}
-                      </span>
+                      <span className="pill-filter text-xs">{level}</span>
                     )}
                     {schemeCategory && (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {schemeCategory}
-                      </span>
+                      <span className="pill-filter text-xs">{schemeCategory}</span>
                     )}
                     {tags && (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {tags}
-                      </span>
+                      <span className="pill-filter text-xs">{tags}</span>
                     )}
                     {q && (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        &quot;{q}&quot;
-                      </span>
+                      <span className="pill-filter text-xs">&quot;{q}&quot;</span>
                     )}
                   </div>
                 </div>
@@ -450,8 +434,8 @@ const SchemesList = () => {
             <div className="flex flex-col gap-4 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Active Schemes</h1>
-                  <p className="text-sm sm:text-base text-gray-500 mt-1">
+                  <h1 className="text-2xl sm:text-3xl font-medium" style={{ color: 'var(--color-ink)' }}>Active Schemes</h1>
+                  <p className="text-sm sm:text-base mt-1" style={{ color: 'var(--color-ink-mute)' }}>
                   {totalSchemes > 0
                     ? `Showing ${totalSchemes} schemes based on your preferences`
                     : 'No schemes found'}
@@ -462,7 +446,7 @@ const SchemesList = () => {
                 {/* Search */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" style={{ color: 'var(--color-ink-mute)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
@@ -471,18 +455,18 @@ const SchemesList = () => {
                     value={uiQ}
                     onChange={(e) => { setUiQ(e.target.value); setQ(e.target.value); setCurrentPage(1); }}
                     placeholder="Search schemes..."
-                    className="w-full sm:w-52 md:w-64 pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                    className="input-field w-full sm:w-52 md:w-64 pl-10"
                   />
                 </div>
 
                 {/* Sort */}
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-500 whitespace-nowrap hidden sm:inline">Sort by:</label>
+                  <label className="text-sm whitespace-nowrap hidden sm:inline" style={{ color: 'var(--color-ink-mute)' }}>Sort by:</label>
                   <div className="relative">
                     <select
                       value={uiSort}
                       onChange={(e) => { setUiSort(e.target.value); setSort(e.target.value); setCurrentPage(1); }}
-                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white appearance-none cursor-pointer pr-9 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                      className="input-field appearance-none cursor-pointer pr-9"
                     >
                       <option value="createdAt:desc">Relevance</option>
                       <option value="createdAt:asc">Oldest</option>
@@ -490,7 +474,7 @@ const SchemesList = () => {
                       <option value="scheme_name:desc">Name Z-A</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4" style={{ color: 'var(--color-ink-mute)' }} fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -501,12 +485,12 @@ const SchemesList = () => {
             </div>
 
             {schemes.length === 0 && !loading ? (
-              <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-                <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-12 text-center" style={{ backgroundColor: 'var(--color-canvas)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-hairline)' }}>
+                <svg className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--color-ink-faint)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">No Schemes Found</h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <h3 className="text-lg font-medium mb-1" style={{ color: 'var(--color-ink)' }}>No Schemes Found</h3>
+                <p className="text-sm mb-4" style={{ color: 'var(--color-ink-mute)' }}>
                   Try adjusting your search criteria or clear all filters.
                 </p>
                 <button
@@ -514,7 +498,8 @@ const SchemesList = () => {
                     setUiLevel("all"); setUiSchemeCategory(""); setUiTags(""); setUiQ("");
                     setLevel("all"); setSchemeCategory(""); setTags(""); setQ(""); setCurrentPage(1);
                   }}
-                  className="text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+                  className="text-sm font-medium transition-colors"
+                  style={{ color: 'var(--color-primary)' }}
                 >
                   View All Schemes
                 </button>
@@ -525,19 +510,26 @@ const SchemesList = () => {
                 {schemes.map((scheme) => (
                   <div
                     key={scheme._id}
-                    className="bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all duration-200 flex flex-col"
+                    className="flex flex-col transition-all duration-200"
+                    style={{
+                      backgroundColor: 'var(--color-canvas)',
+                      borderRadius: 'var(--radius-lg)',
+                      border: '1px solid var(--color-hairline)',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-hairline-strong)'; e.currentTarget.style.boxShadow = 'var(--shadow-level1)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-hairline)'; e.currentTarget.style.boxShadow = 'none'; }}
                   >
                     <div className="p-4 sm:p-6 flex flex-col flex-1">
                       {/* Top: Badge + Level + Save */}
                       <div className="flex items-start justify-between gap-2 mb-4">
                         <div className="flex items-center gap-2 flex-wrap">
                           {scheme.schemeCategory && (
-                            <span className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-semibold border ${getCategoryBadgeColor(scheme.schemeCategory)}`}>
+                            <span className="inline-flex items-center px-3 py-1.5 text-xs font-medium" style={{ borderRadius: 'var(--radius-xs)', backgroundColor: 'var(--color-canvas-soft)', border: '1px solid var(--color-hairline)', color: 'var(--color-ink)' }}>
                               {scheme.schemeCategory}
                             </span>
                           )}
                           {scheme.level && (
-                            <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+                            <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--color-ink-faint)' }}>
                               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                               </svg>
@@ -548,13 +540,13 @@ const SchemesList = () => {
                         <button
                           onClick={() => handleSaveToggle(scheme._id)}
                           disabled={savingStates[scheme._id]}
-                          className={`flex-shrink-0 p-1.5 rounded-md transition-colors ${
-                            savingStates[scheme._id] ? 'opacity-50 cursor-not-allowed' : ''
-                          } ${
-                            savedSchemes.has(scheme._id)
-                              ? 'text-emerald-600'
-                              : 'text-gray-400 hover:text-gray-600'
-                          }`}
+                          className="flex-shrink-0 p-1.5 transition-colors"
+                          style={{
+                            borderRadius: 'var(--radius-xs)',
+                            color: savedSchemes.has(scheme._id) ? 'var(--color-primary)' : 'var(--color-ink-faint)',
+                            opacity: savingStates[scheme._id] ? 0.5 : 1,
+                            cursor: savingStates[scheme._id] ? 'not-allowed' : 'pointer',
+                          }}
                           title={savedSchemes.has(scheme._id) ? 'Unsave' : 'Save'}
                         >
                           {savingStates[scheme._id] ? (
@@ -575,7 +567,8 @@ const SchemesList = () => {
                       {/* Title */}
                       <h3
                         ref={(el) => { if (el) titleRefs.current[scheme._id] = el; }}
-                        className="text-base font-bold text-gray-900 leading-snug mb-2"
+                        className="text-base font-medium leading-snug mb-2"
+                        style={{ color: 'var(--color-ink)' }}
                       >
                         {scheme.scheme_name || scheme.schemeName || "No Name"}
                       </h3>
@@ -584,7 +577,8 @@ const SchemesList = () => {
                       {scheme.details && (
                         <p
                           ref={(el) => { if (el) summaryRefs.current[scheme._id] = el; }}
-                          className="text-sm text-gray-500 leading-relaxed mb-5 line-clamp-3 flex-1"
+                          className="text-sm leading-relaxed mb-5 line-clamp-3 flex-1"
+                          style={{ color: 'var(--color-ink-mute)' }}
                         >
                           {scheme.details.length > 160
                             ? `${scheme.details.substring(0, 160)}...`
@@ -596,35 +590,36 @@ const SchemesList = () => {
                       <div className="space-y-2.5 mb-5">
                         {scheme.schemeCategory && (
                           <div className="flex items-start gap-2.5">
-                            <svg className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-primary)' }} fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
                             <div>
-                              <p className="text-xs text-gray-400">Category</p>
-                              <p className="text-sm font-medium text-gray-800">{scheme.schemeCategory}</p>
+                              <p className="text-xs" style={{ color: 'var(--color-ink-faint)' }}>Category</p>
+                              <p className="text-sm font-medium" style={{ color: 'var(--color-ink)' }}>{scheme.schemeCategory}</p>
                             </div>
                           </div>
                         )}
                         {scheme.tags && scheme.tags.length > 0 && (
                           <div className="flex items-start gap-2.5">
-                            <svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-ink-faint)' }} fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                             </svg>
                             <div>
-                              <p className="text-xs text-gray-400">Tags</p>
-                              <p className="text-sm font-medium text-gray-800">{scheme.tags.slice(0, 3).join(', ')}</p>
+                              <p className="text-xs" style={{ color: 'var(--color-ink-faint)' }}>Tags</p>
+                              <p className="text-sm font-medium" style={{ color: 'var(--color-ink)' }}>{scheme.tags.slice(0, 3).join(', ')}</p>
                             </div>
                           </div>
                         )}
                       </div>
 
                       {/* Footer Actions */}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
                         <div className="flex items-center gap-3">
                           {/* Listen Button */}
                           {ttsAvailable && (
                             <button
-                              className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                              className="inline-flex items-center gap-1.5 text-sm transition-colors"
+                              style={{ color: 'var(--color-ink-mute)' }}
                               title={ttsPlayingMap[scheme._id] ? "Stop" : "Listen"}
                               onClick={() => {
                                 const isPlaying = !!ttsPlayingMap[scheme._id];
@@ -645,18 +640,13 @@ const SchemesList = () => {
                               {ttsPlayingMap[scheme._id] ? 'STOP' : 'LISTEN'}
                             </button>
                           )}
-                          {/* <Link
-                            to={`/schemes/${scheme._id}`}
-                            className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
-                          >
-                            View Details
-                          </Link> */}
                         </div>
 
                         {/* View Details Button */}
                         <Link
                           to={`/schemes/${scheme._id}`}
-                          className="inline-flex items-center px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md transition-colors"
+                          className="btn-primary-cta"
+                          style={{ padding: '8px 16px', fontSize: '13px' }}
                         >
                           View Details
                         </Link>
@@ -674,11 +664,13 @@ const SchemesList = () => {
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
-                    currentPage === 1
-                      ? 'text-gray-300 border-gray-200 cursor-not-allowed'
-                      : 'text-gray-600 border-gray-300 hover:bg-gray-50'
-                  }`}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-sm transition-colors"
+                  style={{
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--color-hairline)',
+                    color: currentPage === 1 ? 'var(--color-ink-faint)' : 'var(--color-ink-mute)',
+                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                  }}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -690,11 +682,13 @@ const SchemesList = () => {
                   <button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm font-medium transition-colors ${
-                      currentPage === pageNum
-                        ? 'bg-emerald-600 text-white border-emerald-600'
-                        : 'text-gray-600 border-gray-300 hover:bg-gray-50'
-                    }`}
+                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-sm font-medium transition-colors"
+                    style={{
+                      borderRadius: 'var(--radius-sm)',
+                      border: currentPage === pageNum ? '1px solid var(--color-primary)' : '1px solid var(--color-hairline)',
+                      backgroundColor: currentPage === pageNum ? 'var(--color-primary)' : 'var(--color-canvas)',
+                      color: currentPage === pageNum ? 'var(--color-on-primary)' : 'var(--color-ink-mute)',
+                    }}
                   >
                     {pageNum}
                   </button>
@@ -702,18 +696,20 @@ const SchemesList = () => {
 
                 {/* Ellipsis */}
                 {totalPages > 5 && currentPage < totalPages - 2 && (
-                  <span className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 text-sm">...</span>
+                  <span className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-sm" style={{ color: 'var(--color-ink-faint)' }}>...</span>
                 )}
 
                 {/* Next */}
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
-                    currentPage === totalPages
-                      ? 'text-gray-300 border-gray-200 cursor-not-allowed'
-                      : 'text-gray-600 border-gray-300 hover:bg-gray-50'
-                  }`}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-sm transition-colors"
+                  style={{
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--color-hairline)',
+                    color: currentPage === totalPages ? 'var(--color-ink-faint)' : 'var(--color-ink-mute)',
+                    cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                  }}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />

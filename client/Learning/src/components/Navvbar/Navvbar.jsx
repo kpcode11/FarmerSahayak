@@ -96,19 +96,16 @@ function Navvbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+    <nav className="sticky top-0 z-50" style={{ backgroundColor: 'var(--color-canvas)', borderBottom: '1px solid var(--color-hairline)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            {/* <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-              <span className="text-2xl">🌾</span>
-            </div> */}
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-lg font-medium" style={{ color: 'var(--color-ink)' }}>
                 Farmer Sahayak
               </span>
-              <span className="text-xs text-gray-500 uppercase tracking-wide">Govt. of India Initiative</span>
+              <span className="text-xs uppercase tracking-wide" style={{ color: 'var(--color-ink-mute)' }}>Govt. of India Initiative</span>
             </div>
           </Link>
 
@@ -116,31 +113,34 @@ function Navvbar() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               to="/schemes"
-              className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === "/schemes"
-                  ? "text-emerald-700"
-                  : "text-gray-700 hover:text-emerald-600"
-              }`}
+              className="text-base font-medium transition-colors duration-200"
+              style={{
+                color: location.pathname === "/schemes" ? 'var(--color-primary)' : 'var(--color-ink)',
+              }}
+              onMouseEnter={(e) => { if (location.pathname !== "/schemes") e.target.style.color = 'var(--color-primary)'; }}
+              onMouseLeave={(e) => { if (location.pathname !== "/schemes") e.target.style.color = 'var(--color-ink)'; }}
             >
               Schemes
             </Link>
             <Link
               to="/maps"
-              className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === "/maps"
-                  ? "text-emerald-700"
-                  : "text-gray-700 hover:text-emerald-600"
-              }`}
+              className="text-base font-medium transition-colors duration-200"
+              style={{
+                color: location.pathname === "/maps" ? 'var(--color-primary)' : 'var(--color-ink)',
+              }}
+              onMouseEnter={(e) => { if (location.pathname !== "/maps") e.target.style.color = 'var(--color-primary)'; }}
+              onMouseLeave={(e) => { if (location.pathname !== "/maps") e.target.style.color = 'var(--color-ink)'; }}
             >
               Help Centers
             </Link>
             <Link
               to="/chatbot"
-              className={`text-sm font-medium transition-colors duration-200 ${
-                location.pathname === "/chatbot"
-                  ? "text-emerald-700"
-                  : "text-gray-700 hover:text-emerald-600"
-              }`}
+              className="text-base font-medium transition-colors duration-200"
+              style={{
+                color: location.pathname === "/chatbot" ? 'var(--color-primary)' : 'var(--color-ink)',
+              }}
+              onMouseEnter={(e) => { if (location.pathname !== "/chatbot") e.target.style.color = 'var(--color-primary)'; }}
+              onMouseLeave={(e) => { if (location.pathname !== "/chatbot") e.target.style.color = 'var(--color-ink)'; }}
             >
               AI Assistant
             </Link>
@@ -151,7 +151,15 @@ function Navvbar() {
             {/* Language Selector */}
             <div className="relative hidden sm:block">
               <select
-                className="pl-3 pr-8 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:border-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all outline-none appearance-none cursor-pointer"
+                className="pl-3 pr-8 py-2 text-sm font-medium appearance-none cursor-pointer outline-none transition-all"
+                style={{
+                  backgroundColor: 'var(--color-canvas)',
+                  color: 'var(--color-ink)',
+                  border: '1px solid var(--color-hairline)',
+                  borderRadius: 'var(--radius-sm)',
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
                 onChange={(e) => {
                   const lang = e.target.value;
                   if (window.setLanguage) window.setLanguage(lang);
@@ -174,7 +182,7 @@ function Navvbar() {
                 <option value="as">অসমীয়া</option>
               </select>
               <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" style={{ color: 'var(--color-ink-mute)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -185,11 +193,14 @@ function Navvbar() {
                 {/* Saved Schemes Button */}
                 <button
                   onClick={() => navigate("/saved-schemes")}
-                  className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    location.pathname === "/saved-schemes"
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                      : "text-gray-700 hover:bg-gray-50 border border-gray-300"
-                  }`}
+                  className="hidden sm:flex items-center gap-2 px-4 py-2 font-medium transition-all duration-200"
+                  style={{
+                    color: location.pathname === "/saved-schemes" ? 'var(--color-primary)' : 'var(--color-ink)',
+                    border: '1px solid var(--color-hairline)',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: location.pathname === "/saved-schemes" ? 'var(--color-canvas-soft)' : 'var(--color-canvas)',
+                    fontSize: '14px',
+                  }}
                   title="View Saved Schemes"
                 >
                   <SavedIcon />
@@ -200,14 +211,21 @@ function Navvbar() {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="flex items-center gap-1 p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
+                    className="flex items-center gap-1 p-2 transition-all"
+                    style={{
+                      color: 'var(--color-ink)',
+                      borderRadius: 'var(--radius-sm)',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-canvas-soft)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     title="Profile"
                   >
                     {user?.imageUrl ? (
                       <img
                         src={user.imageUrl}
                         alt={user.name || "Profile"}
-                        className="w-8 h-8 rounded-full object-cover border-2 border-emerald-500"
+                        className="w-8 h-8 rounded-full object-cover"
+                        style={{ border: '2px solid var(--color-hairline)' }}
                         referrerPolicy="no-referrer"
                       />
                     ) : (
@@ -217,32 +235,36 @@ function Navvbar() {
                   </button>
 
                   {profileDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl animate-fade-in z-50">
+                    <div className="absolute right-0 mt-2 w-56 animate-fade-in z-50" style={{ backgroundColor: 'var(--color-canvas)', border: '1px solid var(--color-hairline)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-card)' }}>
                       {/* User info header */}
-                      <div className="px-4 py-3 border-b border-gray-200">
+                      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--color-hairline)' }}>
                         <div className="flex items-center gap-3">
                           {user?.imageUrl ? (
                             <img
                               src={user.imageUrl}
                               alt={user.name || "Profile"}
-                              className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500"
+                              className="w-10 h-10 rounded-full object-cover"
+                              style={{ border: '2px solid var(--color-hairline)' }}
                               referrerPolicy="no-referrer"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center font-medium" style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}>
                               {user?.name?.charAt(0)?.toUpperCase() || "U"}
                             </div>
                           )}
                           <div className="overflow-hidden">
-                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "User"}</p>
-                            <p className="text-xs text-gray-600 truncate">{user?.email || ""}</p>
+                            <p className="text-sm font-medium truncate" style={{ color: 'var(--color-ink)' }}>{user?.name || "User"}</p>
+                            <p className="text-xs truncate" style={{ color: 'var(--color-ink-mute)' }}>{user?.email || ""}</p>
                           </div>
                         </div>
                       </div>
                       <Link
                         to="/profile"
                         onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 px-4 py-3 transition-colors"
+                        style={{ color: 'var(--color-ink)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-canvas-soft)'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         <ProfileIcon />
                         <span>My Profile</span>
@@ -250,14 +272,20 @@ function Navvbar() {
                       <Link
                         to="/saved-schemes"
                         onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors sm:hidden"
+                        className="flex items-center gap-2 px-4 py-3 transition-colors sm:hidden"
+                        style={{ color: 'var(--color-ink)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-canvas-soft)'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         <SavedIcon />
                         <span>Saved Schemes</span>
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-b-xl transition-colors"
+                        className="flex items-center gap-2 w-full px-4 py-3 text-red-600 transition-colors"
+                        style={{ borderRadius: '0 0 var(--radius-lg) var(--radius-lg)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -271,16 +299,19 @@ function Navvbar() {
             ) : (
               <Link
                 to="/login"
-                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm hover:shadow transition-all"
+                className="btn-primary-cta"
               >
-                Login / Register
+                Sign In
               </Link>
             )}
 
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
+              className="md:hidden p-2 transition-all"
+              style={{ color: 'var(--color-ink)', borderRadius: 'var(--radius-sm)' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-canvas-soft)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -291,47 +322,58 @@ function Navvbar() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4" style={{ borderTop: '1px solid var(--color-hairline)' }}>
             <div className="space-y-1">
               <Link
                 to="/schemes"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  location.pathname === "/schemes"
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
+                className="block px-4 py-2 font-medium transition-all duration-200"
+                style={{
+                  color: location.pathname === "/schemes" ? 'var(--color-primary)' : 'var(--color-ink)',
+                  backgroundColor: location.pathname === "/schemes" ? 'var(--color-canvas-soft)' : 'transparent',
+                  borderRadius: 'var(--radius-sm)',
+                }}
               >
                 Schemes
               </Link>
               <Link
                 to="/maps"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  location.pathname === "/maps"
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
+                className="block px-4 py-2 font-medium transition-all duration-200"
+                style={{
+                  color: location.pathname === "/maps" ? 'var(--color-primary)' : 'var(--color-ink)',
+                  backgroundColor: location.pathname === "/maps" ? 'var(--color-canvas-soft)' : 'transparent',
+                  borderRadius: 'var(--radius-sm)',
+                }}
               >
                 Help Centers
               </Link>
               <Link
                 to="/chatbot"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  location.pathname === "/chatbot"
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
+                className="block px-4 py-2 font-medium transition-all duration-200"
+                style={{
+                  color: location.pathname === "/chatbot" ? 'var(--color-primary)' : 'var(--color-ink)',
+                  backgroundColor: location.pathname === "/chatbot" ? 'var(--color-canvas-soft)' : 'transparent',
+                  borderRadius: 'var(--radius-sm)',
+                }}
               >
                 AI Assistant
               </Link>
 
               {/* Language selector for mobile */}
-              <div className="px-4 pt-3 border-t border-gray-100 mt-2">
-                <label className="text-xs text-gray-500 mb-1 block">Language</label>
+              <div className="px-4 pt-3 mt-2" style={{ borderTop: '1px solid var(--color-hairline)' }}>
+                <label className="text-xs mb-1 block" style={{ color: 'var(--color-ink-mute)' }}>Language</label>
                 <select
-                  className="w-full px-3 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full px-3 py-2 text-sm outline-none"
+                  style={{
+                    backgroundColor: 'var(--color-canvas)',
+                    color: 'var(--color-ink)',
+                    border: '1px solid var(--color-hairline)',
+                    borderRadius: 'var(--radius-sm)',
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
                   onChange={(e) => {
                     const lang = e.target.value;
                     if (window.setLanguage) window.setLanguage(lang);
@@ -351,22 +393,6 @@ function Navvbar() {
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.2s ease-out;
-        }
-      `}</style>
     </nav>
   );
 }

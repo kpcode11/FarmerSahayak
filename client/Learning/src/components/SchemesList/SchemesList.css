@@ -1,10 +1,9 @@
-/* SchemesList.css */
+/* SchemesList.css — Updated with design tokens */
 .schemes-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
-
 
 .pagination-controls {
   display: flex;
@@ -12,8 +11,9 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  background-color: var(--color-canvas-soft);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-hairline);
 }
 
 .per-page {
@@ -24,14 +24,15 @@
 
 .per-page select {
   padding: 8px 12px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  background-color: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-hairline);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
 }
 
 .page-info {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-ink-mute);
 }
 
 .schemes-list {
@@ -42,24 +43,25 @@
 }
 
 .scheme-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-  background-color: white;
+  box-shadow: var(--shadow-level1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: var(--color-canvas);
 }
 
 .scheme-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow-card);
 }
 
 .scheme-card h2 {
   margin-top: 0;
   margin-bottom: 15px;
-  color: #333;
+  color: var(--color-ink);
   font-size: 1.2rem;
+  font-weight: 500;
 }
 
 .scheme-details p {
@@ -69,7 +71,8 @@
 }
 
 .scheme-details strong {
-  color: #555;
+  color: var(--color-ink-secondary);
+  font-weight: 500;
 }
 
 /* Pagination Styles */
@@ -84,32 +87,33 @@
 
 .pagination-button {
   padding: 10px 15px;
-  border: 1px solid #ddd;
-  background-color: white;
+  border: 1px solid var(--color-hairline);
+  background-color: var(--color-canvas);
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s;
   font-size: 0.9rem;
   min-width: 44px;
+  color: var(--color-ink);
 }
 
 .pagination-button:hover:not(:disabled) {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
 }
 
 .pagination-button:disabled {
-  color: #ccc;
+  color: var(--color-ink-faint);
   cursor: not-allowed;
-  background-color: #f8f9fa;
+  background-color: var(--color-canvas-soft);
 }
 
 .pagination-button.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
-  font-weight: bold;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  font-weight: 500;
 }
 
 .page-numbers {
@@ -121,7 +125,7 @@
 
 .ellipsis {
   margin: 0 5px;
-  color: #666;
+  color: var(--color-ink-mute);
 }
 
 .page-jump {
@@ -131,10 +135,11 @@
 
 .page-jump input {
   padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-sm);
   width: 80px;
   margin-left: 10px;
+  color: var(--color-ink);
 }
 
 /* Loading, Error, Empty States */
@@ -146,19 +151,19 @@
 
 .error {
   color: #dc3545;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 8px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
 }
 
 .empty {
-  color: #6c757d;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  color: var(--color-ink-mute);
+  background-color: var(--color-canvas-soft);
+  border-radius: var(--radius-md);
 }
 
 .loading {
-  color: #007bff;
+  color: var(--color-primary);
 }
 
 /* Debug details */
@@ -169,14 +174,14 @@ details {
 
 details summary {
   cursor: pointer;
-  color: #007bff;
-  font-weight: bold;
+  color: var(--color-primary);
+  font-weight: 500;
 }
 
 details pre {
-  background-color: #f8f9fa;
+  background-color: var(--color-canvas-soft);
   padding: 10px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   overflow-x: auto;
   font-size: 0.75rem;
 }
