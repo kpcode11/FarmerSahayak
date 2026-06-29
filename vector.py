@@ -3,7 +3,7 @@ import time
 from dotenv import load_dotenv
 from pymongo import MongoClient
 from langchain_mongodb import MongoDBAtlasVectorSearch
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings, HuggingFaceEndpointEmbeddings
 
 print("[vector.py] Starting initialization...")
 start_time = time.time()
@@ -12,14 +12,22 @@ start_time = time.time()
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGODB_URI")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+HF_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
-if not MONGO_URI or not GOOGLE_API_KEY:
-    print("[vector.py] WARNING: MONGODB_URI or GOOGLE_API_KEY is not set. Retriever will not function.")
+if not MONGO_URI:
+    print("[vector.py] WARNING: MONGODB_URI is not set. Retriever will not function.")
 
 # Initialize HuggingFace Embeddings
-print("[vector.py] Loading HuggingFace embeddings model...")
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+if HF_TOKEN:
+    print("[vector.py] Loading HuggingFace API Embeddings (Low RAM Cloud Mode)...")
+    embeddings = HuggingFaceEndpointEmbeddings(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        huggingfacehub_api_token=HF_TOKEN
+    )
+else:
+    print("[vector.py] Loading HuggingFace embeddings model locally (High RAM)...")
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
 print(f"[vector.py] Embeddings loaded in {time.time() - start_time:.1f}s")
 
 # Connect to MongoDB

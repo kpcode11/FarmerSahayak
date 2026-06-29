@@ -15,7 +15,6 @@ langchain-groq>=0.2
 
 # Production cloud Embeddings (Local fallback)
 langchain-huggingface>=0.1
-sentence-transformers>=2.2
 
 # Vector store
 langchain-mongodb>=0.2
