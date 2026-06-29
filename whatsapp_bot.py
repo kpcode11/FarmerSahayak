@@ -1,13 +1,17 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
-from langchain_ollama.llms import OllamaLLM
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from vector import retriever
 
 app = Flask(__name__)
 
 # Initialize the model
-model = OllamaLLM(model="llama3.2")
+try:
+    model = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
+except Exception as e:
+    print(f"Error initializing Groq: {e}")
+    model = None
 
 template = """
 You are an expert in answering questions about all schemes for farmers in India.
@@ -49,15 +53,26 @@ def whatsapp_webhook():
         elif incoming_msg.lower() in ['help']:
             msg.body("I can help you with:\n\n Information about farmer schemes\n Eligibility criteria\n Benefits and application process\n Required documents\n\nJust ask your question!")
         else:
-            # Retrieve relevant documents
-            retrieved_docs = retriever.invoke(incoming_msg)
-            context = format_docs(retrieved_docs)
-            
-            # Generate answer using context and question
-            result = chain.invoke({"context": context, "question": incoming_msg})
-            
-            # Send the response
-            msg.body(result)
+            if not retriever or not model:
+                msg.body("Sorry, the chatbot service is currently offline.")
+            else:
+                # Retrieve relevant documents
+                retrieved_docs = retriever.invoke(incoming_msg)
+                context = format_docs(retrieved_docs)
+                
+                # Generate answer using context and question
+                result = chain.invoke({"context": context, "question": incoming_msg})
+                
+                # Send the response
+                # Depending on what the model returns, we might need result.content
+                # ChatGoogleGenerativeAI returns an AIMessage, so we need .content
+                # Wait, chain.invoke directly into model will return an AIMessage object.
+                # Let's ensure it's a string.
+                if hasattr(result, 'content'):
+                    response_text = result.content
+                else:
+                    response_text = str(result)
+                msg.body(response_text)
             
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -72,5 +87,5 @@ def health_check():
 
 if __name__ == '__main__':
     print(" WhatsApp Bot Server Starting...")
-    print("Make sure Ollama is running and the model is available!")
+    print("Make sure Groq API key and MongoDB URI are set in .env!")
     app.run(host='0.0.0.0', port=5000, debug=True)

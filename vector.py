@@ -1,54 +1,46 @@
-from langchain_chroma import Chroma
-from langchain_core.documents import Document
 import os
-import pandas as pd
 import time
+from dotenv import load_dotenv
+from pymongo import MongoClient
+from langchain_mongodb import MongoDBAtlasVectorSearch
+from langchain_huggingface import HuggingFaceEmbeddings
 
 print("[vector.py] Starting initialization...")
 start_time = time.time()
 
-# Use HuggingFace embeddings in production (free, no GPU), Ollama locally
-if os.environ.get("GROQ_API_KEY"):
-    from langchain_huggingface import HuggingFaceEmbeddings
-    print("[vector.py] Loading HuggingFace embeddings model...")
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    print(f"[vector.py] Embeddings loaded in {time.time() - start_time:.1f}s")
-else:
-    from langchain_ollama import OllamaEmbeddings
-    embeddings = OllamaEmbeddings(model="mxbai-embed-large")
-    print("Using Ollama embeddings (local)")
+# Load environment variables if not already loaded by the main app
+load_dotenv()
 
-db_location = "./chrome_langchain_db"
-add_documents = not os.path.exists(db_location) or not os.path.exists(os.path.join(db_location, "chroma.sqlite3"))
+MONGO_URI = os.getenv("MONGODB_URI")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-df = pd.read_csv("updated_data.csv")
+if not MONGO_URI or not GOOGLE_API_KEY:
+    print("[vector.py] WARNING: MONGODB_URI or GOOGLE_API_KEY is not set. Retriever will not function.")
 
-if add_documents:
-    documents = []
-    ids = []
+# Initialize HuggingFace Embeddings
+print("[vector.py] Loading HuggingFace embeddings model...")
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+print(f"[vector.py] Embeddings loaded in {time.time() - start_time:.1f}s")
+
+# Connect to MongoDB
+print("[vector.py] Connecting to MongoDB...")
+try:
+    client = MongoClient(MONGO_URI)
+    collection = client["farmers"]["schemes_vectors"]
     
-    for i, row in df.iterrows():
-        document = Document(
-            page_content=f"Name: {row['scheme_name']}. Details: {row['details']}. Benefits: {row['benefits']}. Eligibility: {row['eligibility']}. Application: {row['application']}. Documents: {row['documents']}. Level: {row['level']}. Category: {row['schemeCategory']}.",
-            metadata={"slug": row["slug"], "tags": row["tags"]},
-            id=str(i)
-        )
-        ids.append(str(i))
-        documents.append(document)
-        
-
-vector_store = Chroma(
-    collection_name="schemesInfo",
-    persist_directory=db_location,
-    embedding_function=embeddings
-)
-
-if add_documents:
-    print(f"[vector.py] Embedding {len(df)} documents into ChromaDB (first run only)...")
-    vector_store.add_documents(documents=documents, ids=ids)
-    print(f"[vector.py] Documents embedded in {time.time() - start_time:.1f}s")
+    # Initialize MongoDB Atlas Vector Search
+    vector_store = MongoDBAtlasVectorSearch(
+        collection=collection,
+        embedding=embeddings,
+        index_name="vector_index"
+    )
     
-retriever = vector_store.as_retriever(
-    search_kwargs={"k": 5}
-)
-print(f"[vector.py] Initialization complete in {time.time() - start_time:.1f}s")
+    # Create retriever
+    retriever = vector_store.as_retriever(
+        search_kwargs={"k": 5}
+    )
+    print(f"[vector.py] Initialization complete in {time.time() - start_time:.1f}s")
+except Exception as e:
+    print(f"[vector.py] ERROR connecting to MongoDB: {e}")
+    # Provide a dummy retriever so the app doesn't crash on import, but will fail gracefully when used
+    retriever = None

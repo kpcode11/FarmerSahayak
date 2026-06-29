@@ -7,15 +7,14 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS for Express backend to communicate
 
-# Initialize the model - uses Groq (free cloud LLM) in production, Ollama locally
-if os.environ.get("GROQ_API_KEY"):
-    from langchain_groq import ChatGroq
+# Initialize the model - using Groq API
+from langchain_groq import ChatGroq
+try:
     model = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
     print("Using Groq cloud LLM")
-else:
-    from langchain_ollama.llms import OllamaLLM
-    model = OllamaLLM(model="llama3.2")
-    print("Using local Ollama LLM")
+except Exception as e:
+    print(f"Error initializing Groq: {e}")
+    model = None
 
 template = """
 You are an expert assistant for the Farmer Sahayak platform, helping Indian farmers find and understand government schemes.
@@ -62,12 +61,22 @@ def chat():
                 }
             })
         
+        if not retriever or not model:
+            return jsonify({
+                'success': False,
+                'message': 'Database connection error. Retriever or Model is offline.'
+            }), 503
+            
         # Retrieve relevant documents
         retrieved_docs = retriever.invoke(question)
         context = format_docs(retrieved_docs)
         
         # Generate answer using context and question
         result = chain.invoke({"context": context, "question": question})
+        if hasattr(result, 'content'):
+            answer_text = result.content
+        else:
+            answer_text = str(result)
         
         # Extract scheme slugs for frontend to create links
         schemes = [{'slug': doc.metadata.get('slug'), 'tags': doc.metadata.get('tags')} 
@@ -76,7 +85,7 @@ def chat():
         return jsonify({
             'success': True,
             'data': {
-                'answer': result,
+                'answer': answer_text,
                 'schemes_found': len(retrieved_docs),
                 'related_schemes': schemes[:3]  # Return top 3 schemes
             }
@@ -93,6 +102,8 @@ def chat():
 def health():
     """Health check endpoint"""
     try:
+        if not model or not retriever:
+            raise Exception("Model or retriever not initialized")
         test_response = model.invoke("test")
         return jsonify({
             'success': True,
@@ -133,8 +144,5 @@ if __name__ == '__main__':
     print("Chatbot Service Starting...")
     print("Loading vector store...")
     print(f"Server ready on http://localhost:{port}")
-    if os.environ.get('GROQ_API_KEY'):
-        print("Using Groq cloud LLM")
-    else:
-        print("Using local Ollama - make sure 'ollama serve' is running")
+    print("Using Groq cloud LLM")
     app.run(host='0.0.0.0', port=port, debug=os.environ.get('FLASK_ENV') != 'production')

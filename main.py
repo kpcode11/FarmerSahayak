@@ -1,8 +1,16 @@
-from langchain_ollama.llms import OllamaLLM
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from vector import retriever
+import os
+from dotenv import load_dotenv
 
-model = OllamaLLM(model="llama3.2")
+load_dotenv()
+
+try:
+    model = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
+except Exception as e:
+    print(f"Error initializing Groq: {e}")
+    model = None
 
 template = """
 You are an expert in answering questions about all schemes for farmers in India.
@@ -31,11 +39,21 @@ while True:
     if question == "q":
         break
     
+    if not retriever or not model:
+        print("Error: Database retriever or model is offline.")
+        break
+        
     # Retrieve relevant documents
     retrieved_docs = retriever.invoke(question)
     context = format_docs(retrieved_docs)
     
     # Generate answer using context and question
     result = chain.invoke({"context": context, "question": question})
-    print("Answer:", result)
+    
+    if hasattr(result, 'content'):
+        answer_text = result.content
+    else:
+        answer_text = str(result)
+        
+    print("Answer:", answer_text)
     print("\n[Retrieved", len(retrieved_docs), "relevant schemes]")
