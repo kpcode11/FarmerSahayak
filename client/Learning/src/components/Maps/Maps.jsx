@@ -9,6 +9,7 @@ function initMap(mapRef, setPlaces, markersRef, mapInstanceRef, infoWindowRef, u
     const map = new window.google.maps.Map(mapRef.current, {
       center: userLocation,
       zoom: 15,
+      mapTypeId: "hybrid",
     });
     mapInstanceRef.current = map;
 
@@ -16,6 +17,7 @@ function initMap(mapRef, setPlaces, markersRef, mapInstanceRef, infoWindowRef, u
       position: userLocation,
       map,
       title: "You are here",
+      icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
     });
 
     infoWindowRef.current = new window.google.maps.InfoWindow();

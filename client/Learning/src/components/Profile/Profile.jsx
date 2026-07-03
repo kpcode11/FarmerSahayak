@@ -131,7 +131,7 @@ function Profile() {
               </div>
               <div className="absolute bottom-0 right-0 w-8 h-8 bg-green-500 rounded-full border-4 border-white"></div>
             </div>
-            
+
             {/* User Info */}
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-800 mb-1">
@@ -179,9 +179,8 @@ function Profile() {
                     </svg>
                   </div>
                   <input
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${
-                      errors.name ? "border-red-500 bg-red-50" : "border-gray-300"
-                    }`}
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${errors.name ? "border-red-500 bg-red-50" : "border-gray-300"
+                      }`}
                     placeholder="Enter your full name"
                     value={form.name}
                     onChange={(e) => updateField("name", e.target.value)}
@@ -203,9 +202,8 @@ function Profile() {
                     </svg>
                   </div>
                   <input
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${
-                      errors.phone ? "border-red-500 bg-red-50" : "border-gray-300"
-                    }`}
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${errors.phone ? "border-red-500 bg-red-50" : "border-gray-300"
+                      }`}
                     placeholder="+91 XXXXXXXXXX"
                     value={form.phone}
                     onChange={(e) => updateField("phone", e.target.value)}
@@ -221,9 +219,8 @@ function Profile() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">Age</label>
                 <input
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${
-                    errors.age ? "border-red-500 bg-red-50" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${errors.age ? "border-red-500 bg-red-50" : "border-gray-300"
+                    }`}
                   placeholder="Enter your age"
                   type="number"
                   value={form.profile.age}
@@ -252,9 +249,8 @@ function Profile() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">Annual Income (₹)</label>
                 <input
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${
-                    errors.income ? "border-red-500 bg-red-50" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${errors.income ? "border-red-500 bg-red-50" : "border-gray-300"
+                    }`}
                   placeholder="Enter annual income"
                   type="number"
                   value={form.profile.income}
@@ -311,9 +307,8 @@ function Profile() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 block">Land Holding (acres)</label>
                 <input
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${
-                    errors.landHolding ? "border-red-500 bg-red-50" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none text-gray-900 ${errors.landHolding ? "border-red-500 bg-red-50" : "border-gray-300"
+                    }`}
                   placeholder="Enter land holding in acres"
                   type="number"
                   step="0.01"

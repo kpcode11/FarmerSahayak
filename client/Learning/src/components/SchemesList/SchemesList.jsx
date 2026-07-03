@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import SchemeSearch from './SchemeSearch.jsx';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { getPreferredLangCode, isTtsSupported, speakText, speakViaCloud } from '../../utils/tts.js';
+import { apiRequest } from '../../config/api.js';
 import { useAuth } from '@clerk/clerk-react';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll.js';
 import { API_BASE_URL } from "../../config/api.js";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { apiRequest, getAuthToken } from "../../config/api.js";
-import { isTtsSupported, speakText, stopSpeaking, speakViaCloud, getPreferredLangCode } from "../../utils/tts.js";
 
 // Icon components defined outside to prevent re-render issues
 const SavedIcon = ({ className = "w-5 h-5" }) => (
@@ -41,9 +44,6 @@ const StopIcon = ({ className = 'w-4 h-4' }) => (
 const SchemesList = () => {
   const navigate = useNavigate();
   const { getToken, isSignedIn } = useAuth();
-  const [schemes, setSchemes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [savedSchemes, setSavedSchemes] = useState(new Set());
   const [savingStates, setSavingStates] = useState({});
   const [ttsAvailable, setTtsAvailable] = useState(false);
@@ -52,34 +52,24 @@ const SchemesList = () => {
   const titleRefs = React.useRef({});
   const summaryRefs = React.useRef({});
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalSchemes, setTotalSchemes] = useState(0);
   const [limit, setLimit] = useState(10);
 
   // URL search params syncing for filters/search
   const [searchParams, setSearchParams] = useSearchParams();
   // Applied filter state (drives fetching)
   const [level, setLevel] = useState(searchParams.get("level") || "all");
-  const [schemeCategory, setSchemeCategory] = useState(searchParams.get("schemeCategory") || "");
-  const [tags, setTags] = useState(searchParams.get("tags") || "");
   const [q, setQ] = useState(searchParams.get("q") || "");
   const [sort, setSort] = useState(searchParams.get("sort") || "createdAt:desc");
 
   // UI input state (does not trigger fetching until Apply)
   const [uiLevel, setUiLevel] = useState(searchParams.get("level") || "all");
-  const [uiSchemeCategory, setUiSchemeCategory] = useState(searchParams.get("schemeCategory") || "");
-  const [uiTags, setUiTags] = useState(searchParams.get("tags") || "");
   const [uiQ, setUiQ] = useState(searchParams.get("q") || "");
   const [uiSort, setUiSort] = useState(searchParams.get("sort") || "createdAt:desc");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  // Initialize page/limit from URL once on mount
+  // Initialize limit from URL once on mount
   useEffect(() => {
-    const pageParam = parseInt(searchParams.get("page") || "1", 10);
     const limitParam = parseInt(searchParams.get("limit") || "10", 10);
-    if (!isNaN(pageParam)) setCurrentPage(pageParam);
     if (!isNaN(limitParam)) setLimit(limitParam);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -128,83 +118,63 @@ const SchemesList = () => {
   }, [isSignedIn, getToken]);
 
   const queryObject = useMemo(() => {
-    const obj = { page: currentPage, limit };
+    const obj = { limit };
     if (level && level !== "all") obj.level = level;
-    if (schemeCategory) obj.schemeCategory = schemeCategory;
-    if (tags) obj.tags = tags;
     if (q) obj.q = q;
     if (sort) obj.sort = sort;
     return obj;
-  }, [currentPage, limit, level, schemeCategory, tags, q, sort]);
+  }, [limit, level, q, sort]);
 
-  useEffect(() => {
-    const fetchSchemes = async () => {
-      try {
-        setLoading(true);
-        const params = new URLSearchParams(queryObject).toString();
-        const response = await axios.get(`${API_BASE_URL}/schemes?${params}`);
-
-        if (response.data && response.data.data && response.data.data.scheme) {
-          setSchemes(response.data.data.scheme);
-          setTotalPages(response.data.data.TotalPages || 0);
-          setCurrentPage(response.data.data.CurrentPage || 1);
-          setTotalSchemes(
-            response.data.data.TotalSchemes ||
-              response.data.data.TotalPages * limit
-          );
-        } else {
-          setSchemes([]);
-          setTotalPages(0);
-          setTotalSchemes(0);
-        }
-
-        setError(null);
-      } catch (err) {
-        setError(`Failed to load schemes: ${err.message}`);
-      } finally {
-        setLoading(false);
+  const {
+    data: queryData,
+    isLoading: loading,
+    error: queryError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
+    queryKey: ['schemesList', queryObject],
+    queryFn: async ({ pageParam = 1, signal }) => {
+      const params = new URLSearchParams(queryObject);
+      params.set('page', pageParam);
+      const response = await axios.get(`${API_BASE_URL}/schemes?${params}`, { signal });
+      return response.data?.data;
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage?.CurrentPage < lastPage?.TotalPages) {
+        return lastPage.CurrentPage + 1;
       }
-    };
+      return undefined;
+    },
+    staleTime: 1000 * 60 * 5, // 5 mins
+  });
 
-    fetchSchemes();
-  }, [queryObject]);
+  const schemes = queryData?.pages.flatMap(page => page.scheme || []) || [];
+  const totalSchemes = queryData?.pages[0]?.TotalSchemes || 0;
+  const error = queryError ? `Failed to load schemes: ${queryError.message}` : null;
+
+  const sentinelRef = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    rootMargin: '400px'
+  });
 
   // Reflect applied filters to URL
   useEffect(() => {
     const next = new URLSearchParams();
-    next.set("page", String(currentPage));
     next.set("limit", String(limit));
     if (level && level !== "all") next.set("level", level);
-    if (schemeCategory) next.set("schemeCategory", schemeCategory);
-    if (tags) next.set("tags", tags);
     if (q) next.set("q", q);
     if (sort) next.set("sort", sort);
     setSearchParams(next, { replace: true });
-  }, [currentPage, limit, level, schemeCategory, tags, q, sort, setSearchParams]);
-
-  // Handle page navigation
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    }
-  };
+  }, [limit, level, q, sort, setSearchParams]);
 
   // Handle items per page change
   const handleLimitChange = (e) => {
     setLimit(Number(e.target.value));
-    setCurrentPage(1);
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    setLevel(uiLevel);
-    setSchemeCategory(uiSchemeCategory);
-    setTags(uiTags);
-    setQ(uiQ);
-    setSort(uiSort);
-    setCurrentPage(1);
-  };
 
   // Handle save/unsave scheme
   const handleSaveToggle = async (schemeId) => {
@@ -237,33 +207,7 @@ const SchemesList = () => {
     }
   };
 
-  // Generate page numbers for pagination
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxPagesToShow = 5;
 
-    if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      let startPage = Math.max(1, currentPage - 2);
-      let endPage = Math.min(totalPages, currentPage + 2);
-
-      if (currentPage <= 3) {
-        endPage = 5;
-      }
-      if (currentPage >= totalPages - 2) {
-        startPage = totalPages - 4;
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-    }
-
-    return pages;
-  };
 
   const getCategoryBadgeColor = (category) => {
     switch (category?.toLowerCase()) {
@@ -317,120 +261,28 @@ const SchemesList = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-6 py-8">
+        <div className="py-8">
 
-          {/* ===== LEFT SIDEBAR ===== */}
-          <aside className="w-full lg:w-56 flex-shrink-0">
-            {/* Mobile filter toggle */}
-            <button
-              onClick={() => setFiltersOpen(!filtersOpen)}
-              className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-200 rounded-lg mb-4 text-sm font-medium text-gray-700"
-            >
-              <span className="flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-                Filters
-              </span>
-              <svg className={`w-4 h-4 transition-transform ${filtersOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <form onSubmit={handleSearchSubmit} className={`space-y-7 ${filtersOpen ? 'block' : 'hidden lg:block'}`}>
-
-              {/* Level / Location Filter */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">State / Location</h4>
-                <div className="relative">
-                  <select
-                    value={uiLevel}
-                    onChange={(e) => { setUiLevel(e.target.value); }}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white appearance-none cursor-pointer focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
-                  >
-                    <option value="all">All India (Central)</option>
-                    <option value="State">State Level</option>
-                    <option value="Central">Central Level</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </div>
+          {/* ===== MAIN CONTENT ===== */}
+          <main className="w-full">
+            <div className="flex flex-col gap-6 mb-8">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Active Schemes</h1>
+                  <p className="text-sm sm:text-base text-gray-500 mt-1">
+                  {totalSchemes > 0
+                    ? `Showing ${totalSchemes} schemes based on your preferences`
+                    : 'No schemes found'}
+                  </p>
                 </div>
-              </div>
 
-              {/* Category Filter */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Category</h4>
-                <input
-                  type="text"
-                  value={uiSchemeCategory}
-                  onChange={(e) => setUiSchemeCategory(e.target.value)}
-                  placeholder="e.g. Agriculture"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
-                />
-              </div>
-
-              {/* Tags Filter */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Tags</h4>
-                <input
-                  type="text"
-                  value={uiTags}
-                  onChange={(e) => setUiTags(e.target.value)}
-                  placeholder="comma,separated"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
-                />
-              </div>
-
-              {/* Apply & Clear */}
-              <div className="space-y-2 pt-2">
-                <button
-                  type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-3 rounded-lg transition-colors"
-                >
-                  Apply Filters
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUiLevel("all");
-                    setUiSchemeCategory("");
-                    setUiTags("");
-                    setUiQ("");
-                    setUiSort("createdAt:desc");
-                    setLevel("all");
-                    setSchemeCategory("");
-                    setTags("");
-                    setQ("");
-                    setSort("createdAt:desc");
-                    setCurrentPage(1);
-                  }}
-                  className="w-full border border-gray-300 hover:bg-gray-50 text-gray-600 text-sm font-semibold py-3 rounded-lg transition-colors"
-                >
-                  Clear All
-                </button>
-              </div>
-
-              {/* Active Filters */}
-              {(level !== "all" || schemeCategory || tags || q) && (
-                <div className="pt-2 border-t border-gray-200">
-                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Active Filters</h4>
-                  <div className="flex flex-wrap gap-1.5">
+                {/* Active Filters */}
+                {(level !== "all" || q) && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active:</span>
                     {level !== "all" && (
                       <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                         {level}
-                      </span>
-                    )}
-                    {schemeCategory && (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {schemeCategory}
-                      </span>
-                    )}
-                    {tags && (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        {tags}
                       </span>
                     )}
                     {q && (
@@ -439,65 +291,58 @@ const SchemesList = () => {
                       </span>
                     )}
                   </div>
-                </div>
-              )}
-            </form>
-          </aside>
-
-          {/* ===== MAIN CONTENT ===== */}
-          <main className="flex-1 min-w-0">
-
-            <div className="flex flex-col gap-4 mb-6">
-              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Active Schemes</h1>
-                  <p className="text-sm sm:text-base text-gray-500 mt-1">
-                  {totalSchemes > 0
-                    ? `Showing ${totalSchemes} schemes based on your preferences`
-                    : 'No schemes found'}
-                </p>
+                )}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                {/* Search */}
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                  <input
-                    type="search"
-                    value={uiQ}
-                    onChange={(e) => { setUiQ(e.target.value); setQ(e.target.value); setCurrentPage(1); }}
-                    placeholder="Search schemes..."
-                    className="w-full sm:w-52 md:w-64 pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
-                  />
-                </div>
+              {/* Filters Bar */}
+              <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
+                <SchemeSearch 
+                  initialQuery={uiQ} 
+                  onSearchSubmit={(val) => {
+                    setUiQ(val);
+                    setQ(val);
+                  }}
+                />
 
-                {/* Sort */}
-                <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-500 whitespace-nowrap hidden sm:inline">Sort by:</label>
-                  <div className="relative">
-                    <select
-                      value={uiSort}
-                      onChange={(e) => { setUiSort(e.target.value); setSort(e.target.value); setCurrentPage(1); }}
-                      className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white appearance-none cursor-pointer pr-9 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
-                    >
-                      <option value="createdAt:desc">Relevance</option>
-                      <option value="createdAt:asc">Oldest</option>
-                      <option value="scheme_name:asc">Name A-Z</option>
-                      <option value="scheme_name:desc">Name Z-A</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+                <select
+                  value={uiLevel}
+                  onChange={(e) => { 
+                    setUiLevel(e.target.value); 
+                    setLevel(e.target.value); 
+                  }}
+                  className="w-full md:w-48 px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white cursor-pointer focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                >
+                  <option value="all">All India (Central)</option>
+                  <option value="State">State Level</option>
+                  <option value="Central">Central Level</option>
+                </select>
+
+                <select
+                  value={uiSort}
+                  onChange={(e) => { setUiSort(e.target.value); setSort(e.target.value); }}
+                  className="w-full md:w-48 px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white cursor-pointer focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
+                >
+                  <option value="createdAt:desc">Relevance / Newest</option>
+                  <option value="createdAt:asc">Oldest First</option>
+                  <option value="scheme_name:asc">Name A-Z</option>
+                  <option value="scheme_name:desc">Name Z-A</option>
+                </select>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUiLevel("all");
+                    setUiQ("");
+                    setUiSort("createdAt:desc");
+                    setLevel("all");
+                    setQ("");
+                    setSort("createdAt:desc");
+                  }}
+                  className="w-full md:w-auto md:ml-auto px-5 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap shadow-sm"
+                >
+                  Clear All
+                </button>
               </div>
-            </div>
             </div>
 
             {schemes.length === 0 && !loading ? (
@@ -511,8 +356,8 @@ const SchemesList = () => {
                 </p>
                 <button
                   onClick={() => {
-                    setUiLevel("all"); setUiSchemeCategory(""); setUiTags(""); setUiQ("");
-                    setLevel("all"); setSchemeCategory(""); setTags(""); setQ(""); setCurrentPage(1);
+                    setUiLevel("all"); setUiQ("");
+                    setLevel("all"); setQ("");
                   }}
                   className="text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
                 >
@@ -521,7 +366,7 @@ const SchemesList = () => {
               </div>
             ) : (
               /* ===== SCHEME CARDS GRID ===== */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
+              <div aria-live="polite" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
                 {schemes.map((scheme) => (
                   <div
                     key={scheme._id}
@@ -667,58 +512,37 @@ const SchemesList = () => {
               </div>
             )}
 
-            {/* ===== PAGINATION ===== */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-1.5 sm:gap-2 pb-8 flex-wrap">
-                {/* Prev */}
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
-                    currentPage === 1
-                      ? 'text-gray-300 border-gray-200 cursor-not-allowed'
-                      : 'text-gray-600 border-gray-300 hover:bg-gray-50'
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
+            {/* ===== INFINITE SCROLL SENTINEL & LOADERS ===== */}
+            {schemes.length > 0 && (
+              <div className="flex flex-col items-center pb-8 space-y-6">
+                {/* Sentinel Element */}
+                <div ref={sentinelRef} aria-hidden="true" className="w-full h-1" />
 
-                {/* Page Numbers */}
-                {getPageNumbers().map((pageNum) => (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageChange(pageNum)}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm font-medium transition-colors ${
-                      currentPage === pageNum
-                        ? 'bg-emerald-600 text-white border-emerald-600'
-                        : 'text-gray-600 border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                ))}
-
-                {/* Ellipsis */}
-                {totalPages > 5 && currentPage < totalPages - 2 && (
-                  <span className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 text-sm">...</span>
+                {isFetchingNextPage && (
+                  <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="bg-white rounded-lg border border-gray-200 p-6 flex flex-col h-64 animate-pulse">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                          <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                        </div>
+                        <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+                        <div className="mt-auto pt-4 border-t border-gray-100 flex justify-between">
+                          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                          <div className="h-8 bg-gray-200 rounded w-24"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
 
-                {/* Next */}
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-md border text-sm transition-colors ${
-                    currentPage === totalPages
-                      ? 'text-gray-300 border-gray-200 cursor-not-allowed'
-                      : 'text-gray-600 border-gray-300 hover:bg-gray-50'
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
+                {!hasNextPage && (
+                  <p className="text-gray-500 text-sm font-medium py-4">
+                    You&apos;ve reached the end of the list.
+                  </p>
+                )}
               </div>
             )}
           </main>
